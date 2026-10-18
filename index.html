@@ -1,148 +1,249 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=
-<footer>
-<small>GameBot AZ est un prototype gratuit à réponses intégrées.
-Les informations peuvent être incomplètes ou changer avec les mises à jour des jeux.</small>
-</footer>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameBot AZ - Assistant Gaming</title>
+<meta name="theme-color" content="#080d1b">
+<style>
+*{box-sizing:border-box}
+:root{color-scheme:dark}
+body{
+margin:0;background:#080d1b;color:#edf4ff;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+min-height:100vh
+}
+header{
+padding:20px 16px;text-align:center;
+background:linear-gradient(135deg,#101c37,#092d42);
+border-bottom:1px solid #173a55
+}
+.logo{font-size:30px;font-weight:900;letter-spacing:1px}
+.logo span{color:#28d9f5}
+header p{color:#9bb1ca;margin:8px 0 0;font-size:14px}
+main{max-width:760px;margin:auto;padding:18px 14px}
+h2{font-size:19px;margin:22px 0 12px}
+.intro{
+padding:18px;border-radius:18px;
+background:linear-gradient(135deg,#10203a,#0b2637);
+border:1px solid #1b4964
+}
+.intro h1{font-size:25px;margin:0 0 10px}
+.intro p{color:#b7c8dc;line-height:1.5;margin:0}
+.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.game{
+background:#10192b;border:1px solid #263751;
+border-radius:12px;padding:14px 10px;color:white;
+font-size:15px;font-weight:700;cursor:pointer
+}
+.game:active{transform:scale(.98);border-color:#28d9f5}
+.chat{
+margin-top:12px;background:#0d1525;
+border:1px solid #23354d;border-radius:16px;
+padding:12px;min-height:240px
+}
+.messages{
+display:flex;flex-direction:column;gap:12px;
+max-height:390px;overflow-y:auto
+}
+.msg{
+padding:12px 14px;border-radius:14px;
+white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;
+font-size:14px
+}
+.bot{background:#17243a;align-self:flex-start;max-width:95%}
+.user{background:#075b75;align-self:flex-end;max-width:95%}
+form{display:flex;gap:8px;margin-top:14px}
+input{
+min-width:0;flex:1;padding:13px;border-radius:12px;
+border:1px solid #31445e;background:#080f1d;color:white;
+font-size:16px
+}
+button{
+border:0;border-radius:12px;background:#20c7e7;
+color:#04111b;font-weight:800;padding:12px 15px;
+font-size:14px;cursor:pointer
+}
+.secondary{
+background:#17243a;color:#d9e8fa;
+border:1px solid #30435d
+}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.actions button{flex:1}
+.small{font-size:12px;color:#8499b5;line-height:1.5}
+footer{text-align:center;padding:24px 14px;color:#8499b5;font-size:12px}
+@media(min-width:600px){
+.games{grid-template-columns:repeat(3,minmax(0,1fr))}
+.intro h1{font-size:32px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">GAMEBOT <span>AZ</span> 🤖</div>
+  <p>Ton assistant gaming, gratuitement.</p>
+</header>
+
+<main>
+  <section class="intro">
+    <h1>Le gaming, plus facile. 🎮</h1>
+    <p>Pose tes questions, découvre des astuces et progresse sur tes jeux préférés. Choisis un jeu ou écris directement ta question.</p>
+  </section>
+
+  <h2>🎮 Choisis ton jeu</h2>
+  <div class="games">
+    <button class="game" type="button" data-q="Donne-moi des conseils pour Roblox">🟦 Roblox</button>
+    <button class="game" type="button" data-q="Comment progresser sur Brawl Stars ?">⭐ Brawl Stars</button>
+    <button class="game" type="button" data-q="Donne-moi des conseils pour Fortnite">🔫 Fortnite</button>
+    <button class="game" type="button" data-q="Comment bien débuter Minecraft ?">⛏️ Minecraft</button>
+    <button class="game" type="button" data-q="Donne-moi des conseils pour Rocket League">🚗 Rocket League</button>
+    <button class="game" type="button" data-q="Donne-moi des conseils gaming généraux">🎯 Autres jeux</button>
+  </div>
+
+  <h2>💬 Discute avec GameBot AZ</h2>
+  <section class="chat">
+    <div id="chat" class="messages" aria-live="polite">
+      <div class="msg bot">Salut ! 👋 Je suis GameBot AZ.\n\nJe peux t'aider avec Roblox, Brawl Stars, Fortnite, Minecraft et d'autres jeux.\n\nÉcris ta question ci-dessous pour commencer !</div>
+    </div>
+    <form id="form">
+      <input id="question" type="text" placeholder="Pose ta question gaming..." autocomplete="off" required>
+      <button type="submit">Envoyer ➤</button>
+    </form>
+    <div class="actions">
+      <button class="secondary" id="clear" type="button">Effacer la discussion</button>
+    </div>
+  </section>
+
+  <h2>💡 Exemples de questions</h2>
+  <div class="games">
+    <button class="game" type="button" data-q="Comment réduire les lags sur mobile ?">📱 Réduire les lags</button>
+    <button class="game" type="button" data-q="Comment protéger mon compte gaming ?">🔐 Protéger mon compte</button>
+    <button class="game" type="button" data-q="Comment progresser plus vite sur Roblox ?">🚀 Progresser</button>
+  </div>
+  <p class="small">GameBot AZ utilise des réponses intégrées. Les stratégies et les mises à jour des jeux peuvent évoluer. Ne partage jamais ton mot de passe ni tes codes de vérification.</p>
 </main>
 
+<footer>GameBot AZ · Prototype gaming gratuit</footer>
+
 <script>
-const chat = document.getElementById("chat");
-const input = document.getElementById("question");
+const chat=document.getElementById("chat");
+const input=document.getElementById("question");
+const form=document.getElementById("form");
 
-function say(text, who) {
-  const div = document.createElement("div");
-  div.className = "msg " + who;
-  div.textContent = text;
+function say(text,who){
+  const div=document.createElement("div");
+  div.className="msg "+who;
+  div.textContent=text;
   chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+  chat.scrollTop=chat.scrollHeight;
 }
 
-function answer(question) {
-  const s = question.toLocaleLowerCase("fr").normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+function answer(question){
+  const s=question.toLocaleLowerCase("fr").normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"");
 
-  const has = (...words) => words.some(w => s.includes(w));
+  const has=(...words)=>words.some(w=>s.includes(w));
 
-  const game = has("brawl stars", "brawl") ? "brawl" :
-    has("roblox", "steal a brainrot", "blox fruits", "brookhaven",
-        "blade ball", "rivals") ? "roblox" :
-    has("fortnite") ? "fortnite" :
-    has("minecraft") ? "minecraft" :
-    has("valorant") ? "valorant" :
-    has("rocket league") ? "rocket" :
-    has("pokemon", "pokémon") ? "pokemon" : "";
+  if(has("bonjour","salut","coucou")&&s.length<35)
+    return "Salut ! 👋 Bienvenue sur GameBot AZ ! Quel jeu veux-tu améliorer ?";
 
-  const asks = has("comment", "pourquoi", "quel", "quelle", "quels",
-    "quelles", "meilleur", "meilleure", "aide", "astuce", "conseil",
-    "progresser", "debuter", "debutant", "gagner", "bloque", "bloqué",
-    "parametre", "reglage", "reglages", "visee", "viser", "construire",
-    "build", "argent", "robux", "trophees", "trophees", "brawler",
-    "niveau", "devenir", "obtenir", "avoir", "trouver", "faire");
+  if(has("qui es-tu","qui es tu","ton nom"))
+    return "Je suis GameBot AZ 🤖, un assistant gaming qui propose des conseils et des astuces.";
 
-  if (has("bonjour", "salut", "coucou", "yo") && s.length < 35)
-    return "Salut ! 👋 Prêt à parler gaming ?\n\nChoisis un jeu et pose-moi une question précise !";
+  if(has("hack","cheat","triche","pirater"))
+    return "Je peux t'aider à progresser sans tricher : entraînement, stratégies et réglages. Les cheats peuvent faire bannir ton compte. 🔐";
 
-  if (has("qui es-tu", "qui es tu", "ton nom", "tu es quoi"))
-    return "Je suis GameBot AZ 🤖, un assistant gaming expérimental créé pour aider les joueurs avec des conseils, des astuces et des idées sur différents jeux.";
+  if(has("lag","lags","rame","ping","fps","freeze"))
+    return "🛠️ POUR RÉDUIRE LES LAGS\n\n1. Ferme les applications inutiles.\n2. Vérifie ta connexion.\n3. Réduis les graphismes si possible.\n4. Vérifie l'espace libre sur ton appareil.\n5. Redémarre le jeu.\n\nTu joues sur quel appareil et à quel jeu ?";
 
-  if (has("triche", "cheat", "hack", "pirater", "exploit"))
-    return "Je peux t'aider à progresser sans tricher : réglages, stratégies, entraînement et astuces autorisées. Les cheats et exploits peuvent entraîner la perte de ton compte ou exposer ton appareil à des risques.";
+  if(has("compte vole","compte pirate","mot de passe oublie","compte perdu"))
+    return "🔐 RÉCUPÉRER TON COMPTE\n\nUtilise l'assistance officielle du jeu. Ne donne jamais ton mot de passe ou tes codes de vérification à quelqu'un.";
 
-  if (has("lag", "lags", "rame", "ping", "fps", "freeze", "freezes"))
-    return "🛠️ Pour réduire les lags :\n1. Ferme les applications inutiles.\n2. Vérifie ta connexion Wi-Fi.\n3. Réduis les graphismes si le jeu le permet.\n4. Vérifie l'espace libre sur ton appareil.\n5. Redémarre le jeu.\n\nDis-moi ton appareil et le jeu concerné pour des conseils plus précis.";
+  if(has("robux gratuit","v-bucks gratuit","v bucks gratuit"))
+    return "⚠️ Méfie-toi des sites qui promettent des Robux ou des V-Bucks gratuits en échange de ton mot de passe. Utilise uniquement les offres officielles.";
 
-  if (has("compte vole", "compte piraté", "mot de passe", "compte perdu"))
-    return "🔐 Pour récupérer ton compte, utilise uniquement la page officielle d'assistance du jeu. Ne partage jamais ton mot de passe ni tes codes de vérification, même avec quelqu'un qui promet des récompenses.";
-
-  if (has("robux gratuit", "v bucks gratuit", "v-bucks gratuit"))
-    return "Attention aux sites qui promettent de la monnaie gratuite en échange de ton mot de passe. Utilise les méthodes et promotions officielles du jeu et ne donne jamais tes identifiants.";
-
-  if (game === "roblox") {
-    if (has("steal a brainrot", "brainrot"))
-      return "🧠 STEAL A BRAINROT\n• Observe les déplacements des autres joueurs avant de tenter un vol.\n• Protège ta base et vérifie les améliorations disponibles.\n• Fais attention aux fausses offres et aux échanges douteux.\n\nTu veux des conseils pour débuter, gagner de l'argent dans le jeu ou protéger ta base ?";
-    if (has("blox fruits"))
-      return "🍎 BLOX FRUITS\n• Choisis un objectif adapté à ton niveau.\n• Termine les quêtes correspondant à ta progression.\n• Améliore tes statistiques selon ton style de jeu.\n• Apprends les capacités de ton fruit et leurs limites.\n\nTu es à quelle mer et à quel niveau ?";
-    if (has("brookhaven"))
-      return "🏡 BROOKHAVEN\nTu peux créer des scénarios, explorer les maisons, personnaliser ton personnage et jouer des rôles avec tes amis.\n\nTu cherches des idées de roleplay, des secrets du jeu ou de l'aide pour les commandes ?";
-    if (has("blade ball"))
-      return "⚔️ BLADE BALL\n• Observe la trajectoire de la balle.\n• Évite d'utiliser ta capacité trop tôt.\n• Entraîne-toi à reconnaître le moment où la balle change de cible.\n\nTu veux des conseils pour le timing, les capacités ou les duels ?";
-    if (has("rivals"))
-      return "🎯 RIVALS\n• Entraîne-toi à viser sur une cible avant les combats.\n• Utilise les couvertures et change régulièrement de position.\n• Apprends les cartes et les armes que tu maîtrises le mieux.\n\nTu joues sur mobile ou sur PC ?";
-    return "🎮 ROBLOX\nRoblox regroupe beaucoup de jeux différents : les conseils changent selon l'expérience.\n\n• Pour progresser : apprends les commandes et les objectifs.\n• Pour jouer avec des amis : vérifie les paramètres de confidentialité.\n• Pour éviter les arnaques : ne partage jamais ton mot de passe.\n\nQuel jeu Roblox veux-tu explorer : Blox Fruits, Steal a Brainrot, Rivals, Brookhaven ou un autre ?";
+  if(has("roblox","blox fruits","steal a brainrot","brookhaven","blade ball","rivals","adopt me","bedwars","doors")){
+    if(has("blox fruits"))
+      return "🍎 BLOX FRUITS\n\n• Termine les quêtes adaptées à ton niveau.\n• Améliore tes statistiques selon ton style.\n• Apprends les capacités de ton fruit.\n\nTu es à quelle mer et à quel niveau ?";
+    if(has("steal a brainrot","brainrot"))
+      return "🧠 STEAL A BRAINROT\n\n• Protège ta base.\n• Observe les habitudes des autres joueurs.\n• Vérifie les améliorations disponibles.\n• Méfie-toi des fausses offres et des échanges douteux.\n\nTu veux des conseils pour débuter ou améliorer ta base ?";
+    if(has("blade ball"))
+      return "⚔️ BLADE BALL\n\n• Observe la trajectoire de la balle.\n• Entraîne-toi à déclencher ta capacité au bon moment.\n• Apprends à reconnaître les changements de cible.\n\nTu joues sur mobile ou PC ?";
+    if(has("rivals"))
+      return "🎯 RIVALS\n\n• Entraîne ta visée avant les combats.\n• Utilise les couvertures.\n• Apprends les cartes et les armes que tu préfères.\n\nTu joues sur mobile ou PC ?";
+    if(has("brookhaven"))
+      return "🏡 BROOKHAVEN\n\nTu peux créer des scénarios, personnaliser ton personnage, explorer les maisons et jouer des rôles avec tes amis.\n\nTu veux des idées de roleplay ou des conseils pour le jeu ?";
+    if(has("adopt me"))
+      return "🐶 ADOPT ME\n\n• Explore les activités et les objectifs disponibles.\n• Vérifie les objets avant un échange.\n• Refuse les offres qui te demandent ton mot de passe.\n\nTu veux des conseils pour les animaux ou les échanges ?";
+    if(has("bedwars"))
+      return "🛏️ BEDWARS\n\n• Protège ton lit.\n• Récupère les ressources utiles.\n• Surveille les ponts et les adversaires.\n• Coordonne-toi avec ton équipe.\n\nTu joues en solo ou en équipe ?";
+    if(has("doors"))
+      return "🚪 DOORS\n\n• Avance prudemment et écoute les sons.\n• Observe les indices de l'environnement.\n• Apprends les comportements des entités pour mieux réagir.\n\nTu es bloqué à quelle porte ?";
+    return "🟦 ROBLOX\n\nRoblox regroupe de nombreux jeux. Apprends les commandes, les objectifs et les mécaniques propres à chaque expérience.\n\nTu veux des conseils pour quel jeu Roblox ?";
   }
 
-  if (game === "brawl") {
-    if (has("brawler", "personnage", "perso", "choisir", "meilleur"))
-      return "⭐ BRAWL STARS\nLe meilleur brawler dépend du mode, de la carte et de ton niveau d'amélioration. Regarde sa portée, ses points forts et les obstacles sur la carte.\n\nQuel mode joues-tu et quels brawlers possèdes-tu ?";
-    if (has("trophee", "rank", "rang", "progresser", "gagner"))
-      return "🏆 POUR PROGRESSER SUR BRAWL STARS\n• Choisis un brawler adapté à la carte.\n• Joue avec les objectifs du mode plutôt que de chercher chaque élimination.\n• Utilise les murs et évite de t'exposer inutilement.\n• Avec des amis, communiquez sur vos rôles.\n\nTu joues quel mode ?";
-    return "⭐ BRAWL STARS\nApprends la portée de ton brawler, utilise les obstacles et garde ta capacité spéciale pour un moment utile.\n\nTu veux de l'aide pour les trophées, un brawler, les modes de jeu ou les réglages ?";
+  if(has("brawl stars","brawl")){
+    if(has("brawler","personnage","meilleur"))
+      return "⭐ BRAWL STARS\n\nLe meilleur brawler dépend du mode, de la carte et de son niveau. Choisis un personnage adapté à la portée et aux obstacles.\n\nQuel mode joues-tu et quels brawlers possèdes-tu ?";
+    if(has("trophee","rank","rang","progresser","gagner"))
+      return "🏆 PROGRESSER SUR BRAWL STARS\n\n• Choisis un brawler adapté à la carte.\n• Joue l'objectif du mode.\n• Utilise les obstacles.\n• Évite de t'exposer inutilement.\n\nTu joues quel mode ?";
+    return "⭐ BRAWL STARS\n\nApprends la portée de ton brawler, utilise les obstacles et garde ton Super pour un moment utile.\n\nTu veux de l'aide pour les trophées, un brawler ou un mode ?";
   }
 
-  if (game === "fortnite") {
-    if (has("construction", "construire", "build"))
-      return "🏗️ FORTNITE\n• Entraîne-toi à construire dans un mode créatif adapté.\n• Commence par les murs et les rampes avant d'enchaîner des constructions complexes.\n• En mode sans construction, privilégie les couvertures et les déplacements.\n\nTu joues avec construction ou sans construction ?";
-    if (has("visee", "viser", "aim", "sensibilite", "sensibilité"))
-      return "🎯 FORTNITE : VISÉE\n• Choisis une sensibilité confortable et garde-la un moment.\n• Entraîne-toi à suivre une cible en mouvement.\n• Évite de changer tous tes réglages après chaque partie.\n\nTu joues sur console, PC ou mobile ?";
-    return "🎮 FORTNITE\nPour progresser, travaille ta visée, utilise les couvertures, récupère des ressources et évite les combats inutiles quand tu es mal équipé.\n\nTu veux des conseils sur la visée, les constructions, les modes ou les réglages ?";
+  if(has("fortnite")){
+    if(has("visee","viser","aim","sensibilite"))
+      return "🎯 FORTNITE : VISÉE\n\n• Choisis une sensibilité confortable.\n• Entraîne-toi à suivre une cible.\n• Évite de changer tes réglages après chaque partie.\n\nTu joues sur console, PC ou mobile ?";
+    if(has("construction","construire","build"))
+      return "🏗️ FORTNITE\n\n• Entraîne-toi avec les murs et les rampes.\n• Apprends les constructions progressivement.\n• Sans construction, utilise les couvertures et les déplacements.\n\nTu joues avec construction ou sans construction ?";
+    return "🎮 FORTNITE\n\nTravaille ta visée, utilise les couvertures et évite les combats inutiles lorsque tu es mal équipé.\n\nTu veux des conseils sur la visée, les constructions ou les réglages ?";
   }
 
-  if (game === "minecraft") {
-    if (has("diamant", "diamants", "minerai"))
-      return "⛏️ MINECRAFT\nPour trouver des minerais, prépare une pioche adaptée, des torches, de la nourriture et un moyen de te repérer. Les profondeurs utiles dépendent de la version du jeu.\n\nTu joues en Java ou Bedrock, et dans quelle version ?";
-    if (has("debut", "survie", "commencer"))
-      return "🌳 MINECRAFT : BIEN DÉBUTER\n1. Récupère du bois.\n2. Fabrique une table de craft et des outils.\n3. Trouve de la nourriture.\n4. Prépare un abri avant la nuit.\n5. Fabrique des torches pour éclairer ton abri.\n\nTu joues en survie ou en créatif ?";
-    return "⛏️ MINECRAFT\nTu peux explorer, miner, construire, fabriquer des objets ou combattre des créatures.\n\nTu as besoin d'aide pour la survie, les minerais, les constructions, les commandes ou les redstone ?";
+  if(has("minecraft")){
+    if(has("diamant","minerai"))
+      return "⛏️ MINECRAFT\n\nPrépare une pioche adaptée, des torches, de la nourriture et un moyen de te repérer. La profondeur idéale dépend de la version.\n\nTu joues en Java ou Bedrock ?";
+    return "🌳 MINECRAFT\n\nPour débuter en survie :\n1. Récupère du bois.\n2. Fabrique des outils.\n3. Trouve de la nourriture.\n4. Prépare un abri avant la nuit.\n5. Fabrique des torches.\n\nTu joues en survie ou en créatif ?";
   }
 
-  if (game === "valorant")
-    return "🎯 VALORANT\n• Garde ton viseur à hauteur de tête.\n• Évite de courir lorsque tu tires.\n• Utilise les capacités pour aider ton équipe.\n• Apprends quelques positions sur une carte à la fois.\n\nTu veux des conseils sur la visée, un agent ou une carte ?";
+  if(has("rocket league"))
+    return "🚗 ROCKET LEAGUE\n\n• Travaille les contacts simples avec le ballon.\n• Pense à défendre après une attaque.\n• Évite de poursuivre le ballon si un coéquipier est mieux placé.\n\nTu joues sur quelle plateforme ?";
 
-  if (game === "rocket")
-    return "🚗 ROCKET LEAGUE\n• Travaille les contacts simples avec le ballon avant les figures aériennes.\n• Évite de poursuivre constamment le ballon si un coéquipier est mieux placé.\n• Entraîne-toi à revenir rapidement défendre.\n\nTu joues quel rang et sur quelle plateforme ?";
+  if(has("valorant"))
+    return "🎯 VALORANT\n\n• Garde le viseur à hauteur de tête.\n• Évite de courir en tirant.\n• Utilise les capacités pour aider ton équipe.\n• Apprends les cartes progressivement.\n\nTu veux des conseils sur la visée ou un agent ?";
 
-  if (game === "pokemon")
-    return "⚡ POKÉMON\nPour t'aider, précise le jeu : Pokémon Écarlate/Violet, Pokémon GO, un autre jeu ou le Jeu de Cartes à Collectionner ? Les conseils sont différents selon le jeu.";
+  if(has("pokemon","pokémon"))
+    return "⚡ POKÉMON\n\nPrécise le jeu : Pokémon GO, Écarlate/Violet, un autre jeu ou le Jeu de Cartes à Collectionner. Les conseils sont différents selon le jeu.";
 
-  if (has("conseil", "astuce", "progresser", "devenir meilleur", "devenir fort"))
-    return "💡 CONSEILS GAMING\n1. Choisis un objectif précis par session.\n2. Entraîne-toi régulièrement sans te fatiguer.\n3. Apprends les commandes et les mécaniques.\n4. Analyse ce qui n'a pas marché.\n5. Utilise les paramètres adaptés à ton appareil.\n\nQuel jeu veux-tu améliorer ? Je pourrai te donner des conseils ciblés.";
+  if(has("jeu","jeux","gaming","multigaming"))
+    return "🎮 JEUX DISPONIBLES\n\nJe peux proposer des conseils pour Roblox, Brawl Stars, Fortnite, Minecraft, Valorant, Rocket League et Pokémon.\n\nÉcris le nom du jeu suivi de ta question !";
 
-  if (has("jeu", "jeux", "multi", "multigaming"))
-    return "🎮 JEUX DISPONIBLES\nJe peux proposer des conseils généraux pour Roblox, Brawl Stars, Fortnite, Minecraft, Valorant, Rocket League et Pokémon.\n\nÉcris le nom du jeu suivi de ta question, par exemple : « Minecraft : comment débuter ? »";
-
-  if (!asks)
-    return "Je ne suis pas sûr d'avoir compris. 🤔\n\nEssaie de préciser le jeu et ce que tu veux faire. Par exemple :\n• Roblox : comment progresser dans Blox Fruits ?\n• Fortnite : comment améliorer ma visée ?\n• Minecraft : comment débuter en survie ?\n• Brawl Stars : quel brawler choisir ?";
-
-  return "Je n'ai pas encore de réponse précise pour cette question. 🤖\n\nJe peux aider avec des conseils généraux, mais je ne consulte pas automatiquement Internet et je ne connais pas toutes les dernières mises à jour.\n\nEssaie de préciser le jeu, ton niveau et ce que tu souhaites faire.";
+  return "🤖 Je n'ai pas encore de réponse précise à cette question.\n\nEssaie de préciser le jeu et ton objectif. Par exemple :\n• Roblox : comment progresser dans Blox Fruits ?\n• Fortnite : comment améliorer ma visée ?\n• Minecraft : comment débuter en survie ?\n• Brawl Stars : quel brawler choisir ?\n\nGameBot AZ utilise des réponses intégrées et ne consulte pas automatiquement Internet.";
 }
 
-function ask(q) {
-  q = q.trim();
-  if (!q) return;
-  say(q, "user");
-  say(answer(q), "bot");
+function ask(q){
+  q=q.trim();
+  if(!q)return;
+  say(q,"user");
+  say(answer(q),"bot");
 }
 
-document.getElementById("form").addEventListener("submit", e => {
+form.addEventListener("submit",function(e){
   e.preventDefault();
   ask(input.value);
-  input.value = "";
+  input.value="";
   input.focus();
 });
 
-document.querySelectorAll("[data-q]").forEach(btn => {
-  btn.addEventListener("click", () => ask(btn.dataset.q));
+document.querySelectorAll("[data-q]").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    ask(btn.dataset.q);
+  });
 });
 
-document.getElementById("clear").addEventListener("click", () => {
+document.getElementById("clear").addEventListener("click",function(){
   chat.replaceChildren();
-  say("Conversation effacée ! 👋 Choisis un jeu et pose ta prochaine question.", "bot");
-  input.focus();
+  say("Conversation effacée ! 👋 Choisis un jeu et pose ta prochaine question.","bot");
 });
 </script>
 </body>
-</html
+</html>
