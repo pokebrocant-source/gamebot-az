@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GameBot AZ</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#08111f;color:#eef5ff;
+font-family:Arial,sans-serif}
+header{padding:22px;background:#101e33;
+border-bottom:1px solid #243650}
+h1{margin:0;color:#67e8f9;font-size:25px}
+header p{margin:7px 0 0;color:#a8bbd3}
+main{max-width:650px;margin:auto;padding:18px}
+#chat{height:55vh;min-height:300px;overflow:auto;
+padding:14px;background:#0e1b2d;border-radius:16px}
+.msg{padding:11px 13px;margin:9px 0;
+border-radius:12px;white-space:pre-wrap;line-height:1.5}
+.bot{background:#1b3049}
+.user{background:#164e63;margin-left:20px}
+small{color:#a8bbd3}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+button{background:#164e63;color:white;border:0;
+border-radius:10px;padding:11px;cursor:pointer}
+form{display:flex;gap:8px}
+input{flex:1;min-width:0;background:#14243a;color:white;
+border:1px solid #38516e;border-radius:10px;padding:13px}
+#send{background:#0891b2;font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<h1>🎮 GameBot AZ</h1>
+<p>Ton assistant gaming</p>
+</header>
+<main>
+<div id="chat" aria-live="polite">
+<div class="msg bot">Salut ! 👋 Je suis GameBot AZ.
+Je peux t'aider avec quelques astuces gaming.
+Choisis une question ou écris le nom d'un jeu !</div>
+</div>
+<div class="buttons">
+<button type="button" data-q="Roblox">Roblox</button>
+<button type="button" data-q="Brawl Stars">Brawl Stars</button>
+<button type="button" data-q="Conseils gaming">Conseils gaming</button>
+</div>
+<form id="form">
+<input id="question" placeholder="Pose ta question..."
+autocomplete="off" required>
+<button id="send">Envoyer</button>
+</form>
+<p><small>Prototype expérimental : les réponses sont
+prédéfinies et peuvent être incomplètes.</small></p>
+</main>
+<script>
+const chat=document.getElementById("chat");
+const input=document.getElementById("question");
+
+function say(text,who){
+ const div=document.createElement("div");
+ div.className="msg "+who;
+ div.textContent=text;
+ chat.appendChild(div);
+ chat.scrollTop=chat.scrollHeight;
+}
+
+function answer(q){
+ const s=q.toLowerCase();
+ if(s.includes("roblox")){
+ return "ROBLOX 🎮\nQuel jeu Roblox préfères-tu ?\n"
+ +"Pour progresser, entraîne-toi régulièrement, "
+ +"explore les tutoriels du jeu et protège ton compte. "
+ +"Je n'ai pas encore de données spécifiques à chaque jeu.";
+ }
+ if(s.includes("brawl")){
+ return "BRAWL STARS ⭐\nChoisis un brawler que tu aimes, "
+ +"apprends sa portée et utilise les obstacles "
+ +"intelligemment. Le meilleur choix dépend du mode "
+ +"et de la carte.";
+ }
+ if(s.includes("conseil")||s.includes("astuce")){
+ return "CONSEILS GAMING 💡\n1. Entraîne-toi sur un "
+ +"objectif précis.\n2. Apprends les commandes.\n"
+ +"3. Analyse tes erreurs après une partie.\n"
+ +"Dis-moi le jeu pour des conseils plus ciblés.";
+ }
+ return "Je débute encore ! 🤖 Je connais quelques "
+ +"réponses prédéfinies sur Roblox et Brawl Stars. "
+ +"Essaie un de ces jeux ou reformule ta question. "
+ +"Cette version n'utilise pas encore de véritable IA générative.";
+}
+
+function ask(q){
+ q=q.trim();
+ if(!q)return;
+ say(q,"user");
+ say(answer(q),"bot");
+}
+
+document.getElementById("form").addEventListener("submit",e=>{
+ e.preventDefault();
+ ask(input.value);
+ input.value="";
+ input.focus();
+});
+document.querySelectorAll("[data-q]").forEach(btn=>{
+ btn.addEventListener("click",()=>ask(btn.dataset.q));
+});
+</script>
+</body>
+</html>
