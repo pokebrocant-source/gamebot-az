@@ -1,63 +1,8 @@
-
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#08111f">
-<title>GameBot AZ</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#08111f;color:#eef5ff;font-family:Arial,sans-serif}
-header{padding:22px;background:#101e33;border-bottom:1px solid #243650}
-h1{margin:0;color:#67e8f9;font-size:25px}
-header p{margin:7px 0 0;color:#a8bbd3}
-main{max-width:650px;margin:auto;padding:18px}
-#chat{height:55vh;min-height:300px;overflow:auto;padding:14px;background:#0e1b2d;border-radius:16px}
-.msg{padding:11px 13px;margin:9px 0;border-radius:12px;white-space:pre-wrap;line-height:1.5;overflow-wrap:anywhere}
-.bot{background:#1b3049}
-.user{background:#164e63;margin-left:20px}
-small{color:#a8bbd3;line-height:1.5}
-.buttons{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-button{background:#164e63;color:white;border:0;border-radius:10px;padding:11px;cursor:pointer}
-button:focus-visible,input:focus-visible{outline:2px solid #67e8f9;outline-offset:2px}
-form{display:flex;gap:8px}
-input{flex:1;min-width:0;background:#14243a;color:white;border:1px solid #38516e;border-radius:10px;padding:13px;font-size:16px}
-#send{background:#0891b2;font-weight:bold}
-.secondary{background:#243650}
-footer{margin-top:14px}
-</style>
-</head>
-<body>
-<header>
-<h1>🎮 GameBot AZ</h1>
-<p>Ton assistant gaming multi-jeux</p>
-</header>
-
-<main>
-<div id="chat" aria-live="polite">
-<div class="msg bot">Salut ! 👋 Bienvenue sur GameBot AZ !
-
-Je peux te donner des conseils sur Roblox, Brawl Stars,
-Fortnite, Minecraft et d'autres jeux.
-
-Pose-moi une question ou choisis un jeu ci-dessous ! 🎮</div>
-</div>
-
-<div class="buttons">
-<button type="button" data-q="Roblox : donne-moi des astuces">Roblox</button>
-<button type="button" data-q="Brawl Stars : comment progresser ?">Brawl Stars</button>
-<button type="button" data-q="Fortnite : comment mieux construire et viser ?">Fortnite</button>
-<button type="button" data-q="Minecraft : comment bien débuter ?">Minecraft</button>
-<button type="button" data-q="Donne-moi des conseils gaming">Conseils gaming</button>
-<button type="button" id="clear" class="secondary">Effacer le chat</button>
-</div>
-
-<form id="form">
-<input id="question" placeholder="Pose ta question..." autocomplete="off" required>
-<button id="send" type="submit">Envoyer</button>
-</form>
-
+<meta name="viewport" content="width=
 <footer>
 <small>GameBot AZ est un prototype gratuit à réponses intégrées.
 Les informations peuvent être incomplètes ou changer avec les mises à jour des jeux.</small>
@@ -200,4 +145,4 @@ document.getElementById("clear").addEventListener("click", () => {
 });
 </script>
 </body>
-</html>
+</html
