@@ -1,618 +1,898 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#07111f">
-<title>GameBot AZ - AZerty</title>
-<style>
-:root {
-  --bg:#07111f; --panel:#101e31; --panel2:#14263c;
-  --cyan:#28d9f5; --text:#f3f7fc; --muted:#a8b7c9;
-  --border:#263b53; --green:#77edb1;
-}
-* {box-sizing:border-box}
-body {
-  margin:0; min-height:100vh; background:var(--bg); color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-button,input,select {font:inherit}
-button {cursor:pointer}
-.container {width:min(950px,100%);margin:auto;padding:20px 14px}
-header {display:flex;align-items:center;gap:12px;margin-bottom:22px}
-.logo {
-  width:52px;height:52px;display:grid;place-items:center;border-radius:16px;
-  background:var(--panel2);border:1px solid var(--border);font-size:27px;
-}
-h1 {margin:0;font-size:25px}
-h1 span,.cyan {color:var(--cyan)}
-.subtitle {margin:5px 0 0;color:var(--muted);font-size:14px}
-.panel {
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:18px;padding:17px;margin-bottom:16px;
-}
-.hero {
-  padding:20px;background:linear-gradient(135deg,#10243a,#0c1828);
-}
-.hero h2 {margin:0 0 8px}
-p {line-height:1.55}
-.muted {color:var(--muted)}
-.section-title {font-size:17px;margin:22px 0 12px}
-.games,.actions,.tabs {display:flex;flex-wrap:wrap;gap:8px}
-.game,.tab,.secondary {
-  color:var(--text);background:var(--panel);border:1px solid var(--border);
-  border-radius:11px;padding:10px 12px;
-}
-.game.active,.tab.active,.secondary:hover {
-  border-color:var(--cyan);background:#123044;
-}
-.grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.stat {
-  background:var(--panel2);border:1px solid var(--border);
-  border-radius:13px;padding:13px;
-}
-.stat strong {display:block;font-size:23px;color:var(--cyan);margin-top:5px}
-.field {display:flex;flex-direction:column;gap:6px;margin:12px 0}
-.field label {font-size:13px;color:var(--muted)}
-.field input,.field select {
-  width:100%;background:#081525;color:var(--text);
-  border:1px solid var(--border);border-radius:10px;padding:12px;
-}
-.primary {
-  border:0;border-radius:11px;background:var(--cyan);color:#03121d;
-  padding:12px 15px;font-weight:800;
-}
-.danger {color:#ffb2b2;border-color:#70404b}
-.chat {padding:0;overflow:hidden}
-.chat-header {
-  display:flex;justify-content:space-between;align-items:center;
-  gap:10px;padding:14px;border-bottom:1px solid var(--border);
-}
-.chat-title {font-weight:750}
-.status {font-size:12px;color:var(--green);margin-top:4px;font-weight:400}
-.messages {
-  display:flex;flex-direction:column;gap:14px;min-height:210px;
-  max-height:430px;overflow:auto;padding:15px;
-}
-.msg {display:flex;align-items:flex-start;gap:10px;line-height:1.55;overflow-wrap:anywhere}
-.msg.user {
-  align-self:flex-end;max-width:88%;white-space:pre-wrap;
-  background:#15334a;border:1px solid #24506b;padding:11px 13px;
-  border-radius:15px 15px 4px 15px;
-}
-.mascot {
-  width:48px;height:48px;object-fit:contain;flex-shrink:0;
-  border-radius:12px;transition:transform .2s;
-}
-.mascot:hover {transform:scale(1.08) rotate(-4deg)}
-.bot-text {
-  background:var(--panel2);padding:10px 12px;border-radius:4px 14px 14px 14px;
-  flex:1;min-width:0;white-space:pre-wrap;
-}
-.thinking .mascot {animation:bounce .55s ease-in-out infinite alternate}
-.thinking .bot-text {animation:pulse 1s ease-in-out infinite alternate}
-@keyframes bounce {
-  from {transform:translateY(0) rotate(-4deg)}
-  to {transform:translateY(-7px) rotate(4deg)}
-}
-@keyframes pulse {from{opacity:.65}to{opacity:1}}
-.composer {
-  display:flex;gap:9px;align-items:flex-end;padding:12px;
-  border-top:1px solid var(--border);
-}
-textarea {
-  flex:1;min-width:0;resize:vertical;min-height:45px;max-height:120px;
-  padding:12px;background:#081525;color:var(--text);
-  border:1px solid var(--border);border-radius:11px;font:inherit;
-}
-textarea:focus,input:focus,select:focus {outline:1px solid var(--cyan)}
-.hint {font-size:12px;color:var(--muted);padding:0 13px 13px}
-.saved-item {
-  padding:12px 0;border-bottom:1px solid var(--border);
-}
-.saved-item:last-child {border-bottom:0}
-.saved-answer {white-space:pre-wrap;line-height:1.5;margin:8px 0}
-.small {font-size:12px}
-.empty {padding:12px 0;color:var(--muted)}
-footer {text-align:center;color:var(--muted);font-size:12px;padding:20px 0}
-[hidden] {display:none!important}
-@media(max-width:520px) {
-  .container {padding:15px 10px}
-  .grid {grid-template-columns:1fr 1fr}
-  h1 {font-size:22px}
-  .hero {padding:16px}
-  .messages {padding:11px}
-  .composer {padding:9px}
-  .mascot {width:40px;height:40px}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameBot AZ</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: #101e31;
+      --panel2: #14253b;
+      --cyan: #22d3ee;
+      --blue: #3985ff;
+      --text: #f2f7ff;
+      --muted: #9eb0c8;
+      --border: #263a54;
+      --green: #4ade80;
+      --red: #fb7185;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at top, #132b48, var(--bg) 60%);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      transition: .18s ease;
+    }
+
+    button:focus-visible, input:focus-visible,
+    textarea:focus-visible, select:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .container {
+      width: min(1100px, 94%);
+      margin: auto;
+      padding-bottom: 35px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .brand span { color: var(--cyan); }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #07111f;
+      font-weight: 900;
+    }
+
+    .level-pill {
+      background: #142c43;
+      color: var(--cyan);
+      padding: 9px 12px;
+      border: 1px solid #24516c;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .hero {
+      padding: 30px 0 22px;
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      letter-spacing: 2px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    h1 {
+      font-size: clamp(34px, 7vw, 55px);
+      line-height: 1.02;
+      margin: 12px 0;
+      letter-spacing: -1.5px;
+    }
+
+    h1 span { color: var(--cyan); }
+
+    .subtitle {
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 600px;
+    }
+
+    .mascot-box {
+      background: linear-gradient(145deg, #102941, #0b1828);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mascot-box img {
+      width: min(160px, 70%);
+      height: 160px;
+      object-fit: contain;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .mascot-fallback {
+      font-size: 76px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .thinking .mascot-box img,
+    .thinking .mascot-fallback {
+      animation: think .55s ease-in-out infinite alternate;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+
+    @keyframes think {
+      from { transform: translateY(0) rotate(-4deg); }
+      to { transform: translateY(-9px) rotate(4deg); }
+    }
+
+    .panel {
+      background: rgba(16, 30, 49, .94);
+      border: 1px solid var(--border);
+      border-radius: 19px;
+      padding: 19px;
+      margin-bottom: 18px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    h3 { margin-top: 0; }
+
+    .muted { color: var(--muted); }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .game-button {
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 15px 7px;
+      min-height: 75px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .game-button .emoji {
+      display: block;
+      font-size: 23px;
+      margin-bottom: 7px;
+    }
+
+    .game-button.active {
+      border-color: var(--cyan);
+      background: #10394b;
+      box-shadow: inset 0 0 0 1px var(--cyan);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 15px;
+    }
+
+    .stat-number {
+      color: var(--cyan);
+      font-size: 25px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .progress-track {
+      background: #26384e;
+      height: 7px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--cyan), var(--blue));
+      transition: width .3s;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 11px 15px;
+      border-radius: 10px;
+      color: var(--muted);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      background: #12364a;
+      color: var(--cyan);
+      border-color: #28708b;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .chat-box {
+      height: 340px;
+      overflow-y: auto;
+      padding: 5px 2px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 88%;
+      border-radius: 15px;
+      padding: 12px 14px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: #1a2b40;
+      border: 1px solid #2b405a;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: #104257;
+      border: 1px solid #1b7189;
+    }
+
+    .message-label {
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+
+    .quick-prompts {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 13px;
+    }
+
+    .quick-button {
+      background: #162941;
+      border: 1px solid var(--border);
+      color: #c8d8ed;
+      padding: 8px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .chat-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-width: 0;
+      background: #091625;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 12px;
+    }
+
+    .primary-button {
+      background: linear-gradient(135deg, var(--cyan), #4f8cff);
+      color: #061321;
+      font-weight: 900;
+      border-radius: 11px;
+      padding: 12px 16px;
+    }
+
+    .primary-button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .secondary-button {
+      color: var(--text);
+      background: #1b2d43;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 13px;
+    }
+
+    .field { margin-bottom: 15px; }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .notice {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .favorite-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      background: #0b1929;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 13px;
+      margin-bottom: 10px;
+    }
+
+    .favorite-question {
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .favorite-answer {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 6px;
+      white-space: pre-wrap;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    footer {
+      color: #71849d;
+      text-align: center;
+      font-size: 12px;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 650px) {
+      .hero { grid-template-columns: 1fr; padding-top: 24px; }
+      .mascot-box { min-height: 130px; }
+      .mascot-box img { height: 110px; }
+      .mascot-fallback { font-size: 60px; }
+      .games { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .stats { gap: 7px; }
+      .stat { padding: 11px 8px; }
+      .stat-number { font-size: 21px; }
+      .stat-label { font-size: 11px; }
+      .panel { padding: 14px; }
+      .chat-box { height: 330px; }
+      .chat-form { align-items: stretch; }
+      .chat-form .primary-button { padding: 11px; }
+    }
+  </style>
 </head>
 <body>
-<main class="container">
-  <header>
-    <div class="logo">🤖</div>
-    <div>
-      <h1>GAMEBOT <span>AZ</span></h1>
-      <p class="subtitle">Ton assistant gaming avec AZerty !</p>
-    </div>
-  </header>
+  <div class="container" id="app">
+    <header>
+      <div class="brand">
+        <div class="brand-mark">AZ</div>
+        <div>GameBot <span>AZ</span></div>
+      </div>
+      <div class="level-pill" id="headerLevel">NIVEAU 1</div>
+    </header>
 
-  <section class="panel hero">
-    <h2>🎮 Progresse dans tes jeux préférés</h2>
-    <p class="muted">Apprends, découvre des astuces et améliore ton niveau avec AZerty.</p>
-    <div class="actions">
-      <button class="primary" id="goChat">Parler à AZerty ↗</button>
-      <button class="secondary" id="goProfile">Mon profil</button>
-    </div>
-  </section>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">TON ASSISTANT GAMING</div>
+        <h1>Joue mieux.<br><span>Progresse avec AZ.</span></h1>
+        <p class="subtitle">
+          Pose tes questions gaming à AZerty, découvre des astuces
+          et garde tes réponses préférées au même endroit.
+        </p>
+      </div>
 
-  <h2 class="section-title">📊 Ma progression</h2>
-  <section class="grid">
-    <div class="stat">Niveau<strong id="level">1</strong></div>
-    <div class="stat">XP gagnée<strong id="xp">0</strong></div>
-    <div class="stat">Questions posées<strong id="questionsCount">0</strong></div>
-    <div class="stat">Réponses favorites<strong id="favoritesCount">0</strong></div>
-  </section>
-  <section class="panel" style="margin-top:12px">
-    <div style="display:flex;justify-content:space-between;gap:8px">
-      <strong>Progression vers le niveau suivant</strong>
-      <span id="progressText" class="cyan">0 / 100 XP</span>
-    </div>
-    <div style="height:9px;background:#081525;border-radius:20px;margin-top:12px;overflow:hidden">
-      <div id="progressBar" style="height:100%;width:0%;background:var(--cyan);transition:width .3s"></div>
-    </div>
-    <p id="progressMessage" class="muted small">Pose ta première question pour commencer !</p>
-  </section>
+      <div class="mascot-box">
+        <img src="mascotte.png" alt="Mascotte AZerty"
+          onerror="this.style.display='none';document.getElementById('mascotFallback').style.display='block';">
+        <div class="mascot-fallback" id="mascotFallback" style="display:none">🤖</div>
+      </div>
+    </section>
 
-  <h2 class="section-title">🎮 Choisis ton jeu</h2>
-  <div class="games" id="games">
-    <button class="game" data-game="Roblox">🎲 Roblox</button>
-    <button class="game" data-game="Brawl Stars">⭐ Brawl Stars</button>
-    <button class="game" data-game="Fortnite">🎯 Fortnite</button>
-    <button class="game" data-game="Minecraft">⛏️ Minecraft</button>
-    <button class="game" data-game="Rocket League">🚗 Rocket League</button>
+    <section class="panel">
+      <div class="section-heading">
+        <h2>🎮 Choisis un jeu</h2>
+        <span class="muted" id="selectedGameLabel">Roblox sélectionné</span>
+      </div>
+      <div class="games" id="games">
+        <button class="game-button active" data-game="Roblox">
+          <span class="emoji">🧱</span>Roblox
+        </button>
+        <button class="game-button" data-game="Brawl Stars">
+          <span class="emoji">⭐</span>Brawl Stars
+        </button>
+        <button class="game-button" data-game="Fortnite">
+          <span class="emoji">🪂</span>Fortnite
+        </button>
+        <button class="game-button" data-game="Minecraft">
+          <span class="emoji">⛏️</span>Minecraft
+        </button>
+        <button class="game-button" data-game="Rocket League">
+          <span class="emoji">🚗</span>Rocket League
+        </button>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-number" id="xpStat">0</div>
+        <div class="stat-label">XP gagnés</div>
+        <div class="progress-track"><div class="progress-bar" id="xpBar"></div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="questionsStat">0</div>
+        <div class="stat-label">Questions posées</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" id="favoritesStat">0</div>
+        <div class="stat-label">Favoris enregistrés</div>
+      </div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab active" data-view="chat">💬 Assistant</button>
+      <button class="tab" data-view="profile">👤 Mon profil</button>
+      <button class="tab" data-view="favorites">⭐ Mes favoris</button>
+    </nav>
+
+    <main>
+      <section class="view active" id="view-chat">
+        <div class="panel" id="chatPanel">
+          <div class="section-heading">
+            <h2>💬 Discute avec AZerty</h2>
+            <button class="secondary-button" id="clearChat">Effacer</button>
+          </div>
+
+          <div class="chat-box" id="chatBox" aria-live="polite">
+            <div class="message bot">
+              <div class="message-label">AZERTY</div>
+              Salut ! 👋 Je suis AZerty, ton assistant gaming. Choisis un jeu puis pose-moi une question !
+            </div>
+          </div>
+
+          <div class="quick-prompts">
+            <button class="quick-button" data-prompt="Donne-moi 5 astuces pour progresser.">💡 Astuces</button>
+            <button class="quick-button" data-prompt="Comment bien débuter dans ce jeu ?">🚀 Débutant</button>
+            <button class="quick-button" data-prompt="Donne-moi une stratégie efficace.">🎯 Stratégie</button>
+            <button class="quick-button" data-prompt="Quelles erreurs dois-je éviter ?">⚠️ Erreurs à éviter</button>
+          </div>
+
+          <form class="chat-form" id="chatForm">
+            <input id="questionInput" type="text"
+              placeholder="Pose ta question à AZerty..." maxlength="1000" required>
+            <button class="primary-button" id="sendButton" type="submit">Envoyer ➤</button>
+          </form>
+          <p class="notice">Les réponses sont générées par une IA et peuvent parfois contenir des erreurs.</p>
+        </div>
+      </section>
+
+      <section class="view" id="view-profile">
+        <div class="panel">
+          <div class="section-heading">
+            <h2>👤 Mon profil</h2>
+          </div>
+          <form id="profileForm">
+            <div class="field">
+              <label for="nickname">Mon pseudo</label>
+              <input id="nickname" type="text" maxlength="24" placeholder="Ex. AZerty">
+            </div>
+
+            <div class="profile-actions">
+              <button class="primary-button" type="submit">Enregistrer</button>
+              <button class="secondary-button" type="button" id="resetProgress">Réinitialiser ma progression</button>
+            </div>
+          </form>
+          <p class="notice">
+            Ton pseudo, tes XP et tes favoris sont enregistrés dans le navigateur de cet appareil.
+            Ils ne sont pas automatiquement partagés avec d'autres appareils.
+          </p>
+        </div>
+      </section>
+
+      <section class="view" id="view-favorites">
+        <div class="panel">
+          <div class="section-heading">
+            <h2>⭐ Mes réponses favorites</h2>
+            <button class="secondary-button" id="clearFavorites">Tout supprimer</button>
+          </div>
+          <div id="favoritesList"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>GameBot AZ · Fait pour les gamers 🎮</footer>
   </div>
 
-  <h2 class="section-title">🤖 Ton espace AZerty</h2>
-  <nav class="tabs" aria-label="Sections du site">
-    <button class="tab active" data-tab="chat">💬 Discussion</button>
-    <button class="tab" data-tab="profile">👤 Profil</button>
-    <button class="tab" data-tab="favorites">⭐ Favoris</button>
-  </nav>
+  <script>
+    const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
+    const STORAGE_KEY = "gamebotAzPlayerV1";
 
-  <section id="chatPanel" class="panel chat" style="margin-top:12px">
-    <div class="chat-header">
-      <div>
-        <div class="chat-title">Discussion avec AZerty</div>
-        <div class="status" id="status">● Prêt à t'aider</div>
-      </div>
-      <button class="secondary small" id="clearChat">Nouvelle discussion</button>
-    </div>
-    <div class="messages" id="messages" aria-live="polite">
-      <div class="msg bot">
-        <img class="mascot" src="./mascotte.png" alt="AZerty">
-        <div class="bot-text" id="welcomeText">
-          Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮
-        </div>
-      </div>
-    </div>
-    <div class="actions" style="padding:0 13px 12px">
-      <button class="secondary quick" data-prompt="Donne-moi une astuce pour progresser dans mon jeu.">💡 Une astuce</button>
-      <button class="secondary quick" data-prompt="Explique-moi comment débuter dans mon jeu.">🚀 Débuter</button>
-      <button class="secondary quick" data-prompt="Propose-moi un petit défi gaming.">🏆 Un défi</button>
-    </div>
-    <form class="composer" id="form">
-      <textarea id="question" maxlength="1500" placeholder="Écris à AZerty..." required></textarea>
-      <button class="primary" id="send" type="submit">Envoyer</button>
-    </form>
-    <div class="hint">AZerty peut se tromper. Vérifie les informations importantes.</div>
-  </section>
+    const $ = (id) => document.getElementById(id);
 
-  <section id="profilePanel" class="panel" style="margin-top:12px" hidden>
-    <h2>👤 Mon profil joueur</h2>
-    <p class="muted">Choisis ton pseudo et ton jeu favori. Tes données sont sauvegardées sur ce navigateur.</p>
-    <form id="profileForm">
-      <div class="field">
-        <label for="nickname">Ton pseudo</label>
-        <input id="nickname" maxlength="24" placeholder="Ex. AZertyFan">
-      </div>
-      <div class="field">
-        <label for="favoriteGame">Mon jeu préféré</label>
-        <select id="favoriteGame">
-          <option>Roblox</option>
-          <option>Brawl Stars</option>
-          <option>Fortnite</option>
-          <option>Minecraft</option>
-          <option>Rocket League</option>
-          <option>Autre</option>
-        </select>
-      </div>
-      <button class="primary" type="submit">Enregistrer mon profil</button>
-    </form>
-    <p id="profileMessage" class="muted small" aria-live="polite"></p>
-    <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
-    <h3>Mes données</h3>
-    <p class="muted small">Ton profil, tes favoris et ton XP restent sur cet appareil et ce navigateur. Ils ne sont pas synchronisés avec un compte en ligne.</p>
-    <button class="secondary danger" id="resetProgress" type="button">Réinitialiser ma progression</button>
-  </section>
+    const defaultPlayer = () => ({
+      nickname: "",
+      xp: 0,
+      questions: 0,
+      favorites: []
+    });
 
-  <section id="favoritesPanel" class="panel" style="margin-top:12px" hidden>
-    <h2>⭐ Mes réponses favorites</h2>
-    <p class="muted">Enregistre les conseils que tu veux retrouver plus tard.</p>
-    <div id="favoritesList"><p class="empty">Tu n'as pas encore de favoris.</p></div>
-  </section>
+    function loadPlayer() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        return {
+          ...defaultPlayer(),
+          ...saved,
+          favorites: Array.isArray(saved.favorites) ? saved.favorites : []
+        };
+      } catch (error) {
+        return defaultPlayer();
+      }
+    }
 
-  <footer>GameBot AZ · Apprends, joue et progresse avec AZerty 🎮</footer>
-</main>
+    let player = loadPlayer();
+    let selectedGame = "Roblox";
+    let chatHistory = [];
+    let isThinking = false;
 
-<script>
-const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
-const STORAGE_KEY = "gamebotAzPlayerV1";
-
-const $ = id => document.getElementById(id);
-const messagesEl = $("messages");
-const input = $("question");
-const sendButton = $("send");
-
-let selectedGame = "";
-let history = [];
-let waiting = false;
-let player = loadPlayer();
-
-function defaultPlayer() {
-  return {
-    nickname: "",
-    favoriteGame: "Roblox",
-    xp: 0,
-    questions: 0,
-    favorites: []
-  };
-}
-
-function loadPlayer() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (!stored || typeof stored !== "object") return defaultPlayer();
-    return {
-      ...defaultPlayer(),
-      ...stored,
-      xp: Math.max(0, Number(stored.xp) || 0),
-      questions: Math.max(0, Number(stored.questions) || 0),
-      favorites: Array.isArray(stored.favorites) ? stored.favorites : []
-    };
-  } catch {
-    return defaultPlayer();
-  }
-}
-
-function savePlayer() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(player));
-    return true;
-  } catch {
-    $("profileMessage").textContent =
-      "La sauvegarde locale est indisponible dans ce navigateur.";
-    return false;
-  }
-}
-
-function levelForXP(xp) {
-  return Math.floor(xp / 100) + 1;
-}
-
-function updateDashboard() {
-  const level = levelForXP(player.xp);
-  const currentXP = player.xp % 100;
-
-  $("level").textContent = level;
-  $("xp").textContent = player.xp;
-  $("questionsCount").textContent = player.questions;
-  $("favoritesCount").textContent = player.favorites.length;
-  $("progressText").textContent = currentXP + " / 100 XP";
-  $("progressBar").style.width = currentXP + "%";
-  $("progressMessage").textContent = currentXP === 0
-    ? "Nouveau niveau ! Continue à apprendre avec AZerty."
-    : "Encore " + (100 - currentXP) + " XP avant le prochain niveau.";
-
-  $("nickname").value = player.nickname;
-  $("favoriteGame").value = player.favoriteGame;
-  renderFavorites();
-}
-
-function renderFavorites() {
-  const list = $("favoritesList");
-  list.replaceChildren();
-
-  if (!player.favorites.length) {
-    const empty = document.createElement("p");
-    empty.className = "empty";
-    empty.textContent = "Tu n'as pas encore de favoris.";
-    list.appendChild(empty);
-    return;
-  }
-
-  player.favorites.forEach((favorite, index) => {
-    const item = document.createElement("article");
-    item.className = "saved-item";
-
-    const title = document.createElement("strong");
-    title.textContent = favorite.game || "Conseil gaming";
-
-    const question = document.createElement("p");
-    question.className = "muted small";
-    question.textContent = "Question : " + favorite.question;
-
-    const answer = document.createElement("p");
-    answer.className = "saved-answer";
-    answer.textContent = favorite.answer;
-
-    const remove = document.createElement("button");
-    remove.className = "secondary danger small";
-    remove.textContent = "Retirer des favoris";
-    remove.addEventListener("click", () => {
-      player.favorites.splice(index, 1);
-      savePlayer();
+    function savePlayer() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(player));
+      } catch (error) {
+        console.warn("Impossible d'enregistrer la progression.", error);
+      }
       updateDashboard();
+    }
+
+    function getLevel() {
+      return Math.floor(player.xp / 100) + 1;
+    }
+
+    function updateDashboard() {
+      $("headerLevel").textContent = "NIVEAU " + getLevel();
+      $("xpStat").textContent = player.xp;
+      $("questionsStat").textContent = player.questions;
+      $("favoritesStat").textContent = player.favorites.length;
+      $("xpBar").style.width = (player.xp % 100) + "%";
+      $("nickname").value = player.nickname || "";
+      renderFavorites();
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    function setGame(game) {
+      selectedGame = game;
+      document.querySelectorAll(".game-button").forEach((button) => {
+        button.classList.toggle("active", button.dataset.game === game);
+      });
+      $("selectedGameLabel").textContent = game + " sélectionné";
+    }
+
+    document.querySelectorAll(".game-button").forEach((button) => {
+      button.addEventListener("click", () => setGame(button.dataset.game));
     });
 
-    item.append(title, question, answer, remove);
-    list.appendChild(item);
-  });
-}
+    function switchView(viewName) {
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.view === viewName);
+      });
+      document.querySelectorAll(".view").forEach((view) => {
+        view.classList.toggle("active", view.id === "view-" + viewName);
+      });
+    }
 
-function switchTab(tab) {
-  $("chatPanel").hidden = tab !== "chat";
-  $("profilePanel").hidden = tab !== "profile";
-  $("favoritesPanel").hidden = tab !== "favorites";
-
-  document.querySelectorAll("[data-tab]").forEach(button => {
-    button.classList.toggle("active", button.dataset.tab === tab);
-  });
-
-  if (tab === "chat") input.focus();
-}
-
-document.querySelectorAll("[data-tab]").forEach(button => {
-  button.addEventListener("click", () => switchTab(button.dataset.tab));
-});
-
-$("goChat").addEventListener("click", () => {
-  switchTab("chat");
-  $("chatPanel").scrollIntoView({ behavior: "smooth", block: "start" });
-});
-
-$("goProfile").addEventListener("click", () => {
-  switchTab("profile");
-  $("profilePanel").scrollIntoView({ behavior: "smooth", block: "start" });
-});
-
-document.querySelectorAll(".game").forEach(button => {
-  button.addEventListener("click", () => {
-    selectedGame = button.dataset.game;
-    player.favoriteGame = selectedGame;
-    savePlayer();
-    updateDashboard();
-
-    document.querySelectorAll(".game").forEach(item => {
-      item.classList.toggle("active", item === button);
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => switchView(tab.dataset.view));
     });
 
-    switchTab("chat");
-    input.value = "Aide-moi à progresser sur " + selectedGame + ".";
-    input.focus();
-  });
-});
+    function addMessage(role, text, favoriteId = null) {
+      const box = $("chatBox");
+      const message = document.createElement("div");
+      message.className = "message " + (role === "user" ? "user" : "bot");
 
-$("profileForm").addEventListener("submit", event => {
-  event.preventDefault();
-  player.nickname = $("nickname").value.trim().slice(0, 24);
-  player.favoriteGame = $("favoriteGame").value;
-  savePlayer();
-  updateDashboard();
+      const label = document.createElement("div");
+      label.className = "message-label";
+      label.textContent = role === "user"
+        ? (player.nickname || "TOI")
+        : "AZERTY";
 
-  $("profileMessage").textContent = "Profil enregistré sur cet appareil ! 🎮";
-});
+      const content = document.createElement("div");
+      content.textContent = text;
+      message.append(label, content);
 
-$("resetProgress").addEventListener("click", () => {
-  if (!confirm("Réinitialiser ton XP, tes questions et tes favoris ? Cette action est définitive.")) return;
+      if (role === "bot" && favoriteId !== null) {
+        const favoriteButton = document.createElement("button");
+        favoriteButton.className = "quick-button";
+        favoriteButton.style.marginTop = "10px";
+        favoriteButton.textContent = "☆ Ajouter aux favoris";
+        favoriteButton.addEventListener("click", () => toggleFavorite({
+          id: favoriteId,
+          game: selectedGame,
+          question: favoriteId.question,
+          answer: text
+        }, favoriteButton));
+        message.appendChild(favoriteButton);
+      }
 
-  player.xp = 0;
-  player.questions = 0;
-  player.favorites = [];
-  savePlayer();
-  updateDashboard();
-  $("profileMessage").textContent = "Ta progression a été réinitialisée.";
-});
+      box.appendChild(message);
+      box.scrollTop = box.scrollHeight;
+    }
 
-function addMessage(role, content, options = {}) {
-  const row = document.createElement("div");
-  row.className = "msg " + (role === "user" ? "user" : "bot");
-  if (options.thinking) row.classList.add("thinking");
+    function toggleFavorite(item, button) {
+      const index = player.favorites.findIndex((fav) => fav.id === item.id);
 
-  if (role === "user") {
-    row.textContent = content;
-  } else {
-    const mascot = document.createElement("img");
-    mascot.className = "mascot";
-    mascot.src = "./mascotte.png";
-    mascot.alt = "AZerty";
-    mascot.onerror = () => { mascot.style.display = "none"; };
+      if (index >= 0) {
+        player.favorites.splice(index, 1);
+        if (button) button.textContent = "☆ Ajouter aux favoris";
+      } else {
+        player.favorites.unshift({
+          id: item.id,
+          game: item.game,
+          question: item.question,
+          answer: item.answer,
+          createdAt: new Date().toISOString()
+        });
+        if (button) button.textContent = "★ Dans les favoris";
+      }
 
-    const text = document.createElement("div");
-    text.className = "bot-text";
-    text.textContent = content;
-    row.append(mascot, text);
+      savePlayer();
+      renderFavorites();
+    }
 
-    if (options.favoriteAnswer) {
-      const favoriteButton = document.createElement("button");
-      favoriteButton.className = "secondary small";
-      favoriteButton.textContent = isFavorite(options.favoriteAnswer)
-        ? "⭐ Enregistré"
-        : "☆ Ajouter aux favoris";
+    function renderFavorites() {
+      const list = $("favoritesList");
+      if (!list) return;
 
-      favoriteButton.addEventListener("click", () => {
-        const entry = options.favoriteAnswer;
-        const index = player.favorites.findIndex(item =>
-          item.question === entry.question && item.answer === entry.answer
-        );
+      if (!player.favorites.length) {
+        list.innerHTML = '<div class="empty">⭐<br><br>Tu n’as pas encore de favoris.<br>Ajoute une réponse depuis le chat !</div>';
+        return;
+      }
 
-        if (index >= 0) {
-          player.favorites.splice(index, 1);
-        } else {
-          player.favorites.unshift({
-            ...entry,
-            id: Date.now(),
-            game: entry.game || selectedGame || player.favoriteGame
-          });
-          player.favorites = player.favorites.slice(0, 100);
+      list.innerHTML = "";
+
+      player.favorites.forEach((favorite) => {
+        const item = document.createElement("div");
+        item.className = "favorite-item";
+
+        const content = document.createElement("div");
+        content.style.flex = "1";
+
+        const game = document.createElement("div");
+        game.className = "message-label";
+        game.textContent = favorite.game || "Gaming";
+
+        const question = document.createElement("div");
+        question.className = "favorite-question";
+        question.textContent = favorite.question || "";
+
+        const answer = document.createElement("div");
+        answer.className = "favorite-answer";
+        answer.textContent = favorite.answer || "";
+
+        content.append(game, question, answer);
+
+        const remove = document.createElement("button");
+        remove.className = "secondary-button";
+        remove.textContent = "Supprimer";
+        remove.addEventListener("click", () => {
+          player.favorites = player.favorites.filter((fav) => fav.id !== favorite.id);
+          savePlayer();
+        });
+
+        item.append(content, remove);
+        list.appendChild(item);
+      });
+    }
+
+    async function askBot(question) {
+      if (isThinking) return;
+
+      isThinking = true;
+      $("sendButton").disabled = true;
+      $("questionInput").disabled = true;
+      $("app").classList.add("thinking");
+
+      const requestId = Date.now() + "-" + Math.random().toString(36).slice(2);
+      requestId.question = question;
+
+      addMessage("user", question);
+      chatHistory.push({ role: "user", content: question });
+      chatHistory = chatHistory.slice(-12);
+
+      const typing = document.createElement("div");
+      typing.className = "message bot";
+      typing.id = "typingMessage";
+      typing.textContent = "AZerty réfléchit…";
+      $("chatBox").appendChild(typing);
+      $("chatBox").scrollTop = $("chatBox").scrollHeight;
+
+      const userMessage = {
+        role: "user",
+        content:
+          (player.nickname ? "Le pseudo du joueur est " + player.nickname + ". " : "") +
+          "Le jeu choisi pour cette question est " + selectedGame + ". " +
+          question
+      };
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [
+              ...chatHistory.slice(0, -1),
+              userMessage
+            ]
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error("Le serveur a répondu avec le code " + response.status);
         }
 
+        const data = await response.json();
+        const answer = data.response || data.answer || data.result ||
+          "Désolé, je n’ai pas réussi à obtenir une réponse. Réessaie.";
+
+        $("typingMessage")?.remove();
+        addMessage("bot", answer, requestId);
+        chatHistory.push({ role: "assistant", content: answer });
+        chatHistory = chatHistory.slice(-12);
+
+        player.xp += 10;
+        player.questions += 1;
         savePlayer();
-        updateDashboard();
-        favoriteButton.textContent = isFavorite(entry)
-          ? "⭐ Enregistré"
-          : "☆ Ajouter aux favoris";
-      });
-
-      text.appendChild(document.createElement("br"));
-      text.appendChild(favoriteButton);
-    }
-  }
-
-  messagesEl.appendChild(row);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-  return row;
-}
-
-function isFavorite(entry) {
-  return player.favorites.some(item =>
-    item.question === entry.question && item.answer === entry.answer
-  );
-}
-
-function greet() {
-  const name = player.nickname ? " " + player.nickname : "";
-  $("welcomeText").textContent =
-    "Bonjour" + name + " ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
-}
-
-document.querySelectorAll(".quick").forEach(button => {
-  button.addEventListener("click", () => {
-    input.value = button.dataset.prompt;
-    input.focus();
-  });
-});
-
-$("clearChat").addEventListener("click", () => {
-  history = [];
-  messagesEl.replaceChildren();
-
-  const row = document.createElement("div");
-  row.className = "msg bot";
-
-  const mascot = document.createElement("img");
-  mascot.className = "mascot";
-  mascot.src = "./mascotte.png";
-  mascot.alt = "AZerty";
-  mascot.onerror = () => { mascot.style.display = "none"; };
-
-  const text = document.createElement("div");
-  text.className = "bot-text";
-  const name = player.nickname ? " " + player.nickname : "";
-  text.textContent =
-    "Bonjour" + name + " ! Nouvelle discussion ? Je suis AZerty 🎮 Que veux-tu apprendre aujourd'hui ?";
-
-  row.append(mascot, text);
-  messagesEl.appendChild(row);
-  $("status").textContent = "● Nouvelle discussion";
-});
-
-$("form").addEventListener("submit", async event => {
-  event.preventDefault();
-  if (waiting) return;
-
-  const typed = input.value.trim();
-  if (!typed) return;
-
-  const question = selectedGame && !typed.toLowerCase().includes(selectedGame.toLowerCase())
-    ? "Mon jeu est " + selectedGame + ". " + typed
-    : typed;
-
-  addMessage("user", typed);
-  input.value = "";
-  waiting = true;
-  sendButton.disabled = true;
-  sendButton.textContent = "...";
-  $("status").textContent = "● AZerty réfléchit...";
-
-  const thinking = addMessage("assistant", "AZerty réfléchit...", { thinking: true });
-
-  const userMessage = {
-    role: "user",
-    content: (player.nickname ? "Le pseudo du joueur est " + player.nickname + ". " : "") +
-      "Son jeu préféré est " + player.favoriteGame + ". " + question
-  };
-
-  const outgoing = [...history, userMessage].slice(-12);
-
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: userMessage.content,
-        messages: outgoing
-      })
-    });
-
-    let data;
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error("Réponse serveur illisible");
-    }
-
-    if (!response.ok) throw new Error(data.error || "Erreur serveur");
-
-    const answer = typeof data.answer === "string"
-      ? data.answer
-      : "Je n'ai pas réussi à préparer une réponse.";
-
-    thinking.remove();
-    addMessage("assistant", answer, {
-      favoriteAnswer: {
-        question: typed,
-        answer,
-        game: selectedGame || player.favoriteGame
+      } catch (error) {
+        $("typingMessage")?.remove();
+        addMessage(
+          "bot",
+          "Je n’arrive pas à contacter le serveur pour le moment. Vérifie ta connexion et réessaie. Si le problème continue, vérifie que ton Worker Cloudflare est bien déployé."
+        );
+        console.error("Erreur GameBot AZ :", error);
+      } finally {
+        isThinking = false;
+        $("sendButton").disabled = false;
+        $("questionInput").disabled = false;
+        $("app").classList.remove("thinking");
+        $("questionInput").focus();
       }
+    }
+
+    $("chatForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const question = $("questionInput").value.trim();
+      if (!question || isThinking) return;
+      $("questionInput").value = "";
+      askBot(question);
     });
 
-    history = [
-      ...outgoing,
-      { role: "assistant", content: answer }
-    ].slice(-12);
+    document.querySelectorAll("[data-prompt]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!isThinking) askBot(button.dataset.prompt);
+      });
+    });
 
-    player.questions += 1;
-    player.xp += 10;
-    savePlayer();
+    $("profileForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      player.nickname = $("nickname").value.trim().slice(0, 24);
+      savePlayer();
+      alert("Profil enregistré !");
+    });
+
+    $("clearChat").addEventListener("click", () => {
+      if (!confirm("Effacer la conversation affichée ?")) return;
+      chatHistory = [];
+      $("chatBox").innerHTML = "";
+      addMessage("bot", "Conversation effacée ! Pose-moi une nouvelle question. 🎮");
+    });
+
+    $("clearFavorites").addEventListener("click", () => {
+      if (!player.favorites.length) return;
+      if (!confirm("Supprimer tous tes favoris ?")) return;
+      player.favorites = [];
+      savePlayer();
+    });
+
+    $("resetProgress").addEventListener("click", () => {
+      if (!confirm("Réinitialiser ton pseudo, tes XP, tes questions et tes favoris ?")) return;
+      player = defaultPlayer();
+      savePlayer();
+      alert("Ta progression a été réinitialisée.");
+    });
+
     updateDashboard();
-
-    $("status").textContent = "● AZerty est prêt";
-  } catch (error) {
-    thinking.remove();
-    addMessage("assistant",
-      "Oups ! Je n'arrive pas à contacter le serveur. Vérifie ta connexion et le déploiement Cloudflare.");
-    $("status").textContent = "● Connexion à vérifier";
-    console.error(error);
-  } finally {
-    waiting = false;
-    sendButton.disabled = false;
-    sendButton.textContent = "Envoyer";
-  }
-});
-
-updateDashboard();
-greet();
-</script>
+    setGame("Roblox");
+  </script>
 </body>
 </html>
