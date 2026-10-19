@@ -1,487 +1,618 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07111f">
-  <title>GameBot AZ - AZerty</title>
-  <style>
-    :root {
-      --bg: #07111f;
-      --panel: #101e31;
-      --panel2: #14263c;
-      --cyan: #28d9f5;
-      --text: #f3f7fc;
-      --muted: #a8b7c9;
-      --border: #263b53;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    button, textarea { font: inherit; }
-
-    .container {
-      width: min(900px, 100%);
-      margin: auto;
-      padding: 22px 16px;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      margin-bottom: 24px;
-    }
-
-    .logo {
-      display: grid;
-      place-items: center;
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      font-size: 27px;
-      flex-shrink: 0;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 25px;
-      letter-spacing: .3px;
-    }
-
-    h1 span { color: var(--cyan); }
-
-    .subtitle {
-      margin: 5px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .intro {
-      padding: 22px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      background: linear-gradient(135deg, #10243a, #0c1828);
-      margin-bottom: 18px;
-    }
-
-    .intro h2 {
-      margin: 0 0 8px;
-      font-size: 22px;
-    }
-
-    .intro p {
-      color: var(--muted);
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    .section-title {
-      font-size: 16px;
-      margin: 24px 0 12px;
-    }
-
-    .games {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-bottom: 20px;
-    }
-
-    .game {
-      color: var(--text);
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 14px;
-      cursor: pointer;
-      transition: .15s;
-    }
-
-    .game:hover, .game.active {
-      border-color: var(--cyan);
-      background: #123044;
-    }
-
-    .chat {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-    }
-
-    .chat-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 15px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .chat-title {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-weight: 700;
-    }
-
-    .status {
-      color: #77edb1;
-      font-size: 12px;
-      margin-top: 4px;
-      font-weight: 400;
-    }
-
-    .small-button {
-      color: var(--muted);
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 8px 10px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .messages {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      min-height: 230px;
-      max-height: 440px;
-      overflow-y: auto;
-      padding: 17px;
-    }
-
-    .msg {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      line-height: 1.55;
-      overflow-wrap: anywhere;
-    }
-
-    .msg.user {
-      align-self: flex-end;
-      max-width: 88%;
-      background: #15334a;
-      border: 1px solid #24506b;
-      border-radius: 15px 15px 4px 15px;
-      padding: 11px 13px;
-      white-space: pre-wrap;
-    }
-
-    .msg.bot {
-      white-space: pre-wrap;
-    }
-
-    .mascot {
-      width: 44px;
-      height: 44px;
-      object-fit: contain;
-      flex-shrink: 0;
-      border-radius: 12px;
-    }
-
-    .thinking .mascot {
-      animation: bounce .65s ease-in-out infinite alternate;
-    }
-
-    @keyframes bounce {
-      from { transform: translateY(0) rotate(-4deg); }
-      to { transform: translateY(-5px) rotate(4deg); }
-    }
-
-    .bot-text {
-      padding: 10px 12px;
-      border-radius: 4px 14px 14px 14px;
-      background: var(--panel2);
-      flex: 1;
-      min-width: 0;
-    }
-
-    .composer {
-      display: flex;
-      align-items: flex-end;
-      gap: 10px;
-      padding: 13px;
-      border-top: 1px solid var(--border);
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 46px;
-      max-height: 130px;
-      flex: 1;
-      min-width: 0;
-      color: var(--text);
-      background: #081525;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 13px;
-      outline: none;
-    }
-
-    textarea:focus { border-color: var(--cyan); }
-
-    .send {
-      min-height: 46px;
-      padding: 0 17px;
-      color: #03121d;
-      background: var(--cyan);
-      border: 0;
-      border-radius: 12px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .send:disabled { opacity: .5; cursor: wait; }
-
-    .hint {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.5;
-      padding: 0 15px 15px;
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      padding: 22px 0 8px;
-    }
-
-    @media (max-width: 480px) {
-      .container { padding: 16px 11px; }
-      .intro { padding: 17px; }
-      .intro h2 { font-size: 20px; }
-      h1 { font-size: 22px; }
-      .game { padding: 10px 11px; font-size: 13px; }
-      .messages { padding: 12px; }
-      .composer { padding: 10px; }
-      .send { padding: 0 13px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>GameBot AZ - AZerty</title>
+<style>
+:root {
+  --bg:#07111f; --panel:#101e31; --panel2:#14263c;
+  --cyan:#28d9f5; --text:#f3f7fc; --muted:#a8b7c9;
+  --border:#263b53; --green:#77edb1;
+}
+* {box-sizing:border-box}
+body {
+  margin:0; min-height:100vh; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input,select {font:inherit}
+button {cursor:pointer}
+.container {width:min(950px,100%);margin:auto;padding:20px 14px}
+header {display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.logo {
+  width:52px;height:52px;display:grid;place-items:center;border-radius:16px;
+  background:var(--panel2);border:1px solid var(--border);font-size:27px;
+}
+h1 {margin:0;font-size:25px}
+h1 span,.cyan {color:var(--cyan)}
+.subtitle {margin:5px 0 0;color:var(--muted);font-size:14px}
+.panel {
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:18px;padding:17px;margin-bottom:16px;
+}
+.hero {
+  padding:20px;background:linear-gradient(135deg,#10243a,#0c1828);
+}
+.hero h2 {margin:0 0 8px}
+p {line-height:1.55}
+.muted {color:var(--muted)}
+.section-title {font-size:17px;margin:22px 0 12px}
+.games,.actions,.tabs {display:flex;flex-wrap:wrap;gap:8px}
+.game,.tab,.secondary {
+  color:var(--text);background:var(--panel);border:1px solid var(--border);
+  border-radius:11px;padding:10px 12px;
+}
+.game.active,.tab.active,.secondary:hover {
+  border-color:var(--cyan);background:#123044;
+}
+.grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.stat {
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:13px;padding:13px;
+}
+.stat strong {display:block;font-size:23px;color:var(--cyan);margin-top:5px}
+.field {display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.field label {font-size:13px;color:var(--muted)}
+.field input,.field select {
+  width:100%;background:#081525;color:var(--text);
+  border:1px solid var(--border);border-radius:10px;padding:12px;
+}
+.primary {
+  border:0;border-radius:11px;background:var(--cyan);color:#03121d;
+  padding:12px 15px;font-weight:800;
+}
+.danger {color:#ffb2b2;border-color:#70404b}
+.chat {padding:0;overflow:hidden}
+.chat-header {
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;padding:14px;border-bottom:1px solid var(--border);
+}
+.chat-title {font-weight:750}
+.status {font-size:12px;color:var(--green);margin-top:4px;font-weight:400}
+.messages {
+  display:flex;flex-direction:column;gap:14px;min-height:210px;
+  max-height:430px;overflow:auto;padding:15px;
+}
+.msg {display:flex;align-items:flex-start;gap:10px;line-height:1.55;overflow-wrap:anywhere}
+.msg.user {
+  align-self:flex-end;max-width:88%;white-space:pre-wrap;
+  background:#15334a;border:1px solid #24506b;padding:11px 13px;
+  border-radius:15px 15px 4px 15px;
+}
+.mascot {
+  width:48px;height:48px;object-fit:contain;flex-shrink:0;
+  border-radius:12px;transition:transform .2s;
+}
+.mascot:hover {transform:scale(1.08) rotate(-4deg)}
+.bot-text {
+  background:var(--panel2);padding:10px 12px;border-radius:4px 14px 14px 14px;
+  flex:1;min-width:0;white-space:pre-wrap;
+}
+.thinking .mascot {animation:bounce .55s ease-in-out infinite alternate}
+.thinking .bot-text {animation:pulse 1s ease-in-out infinite alternate}
+@keyframes bounce {
+  from {transform:translateY(0) rotate(-4deg)}
+  to {transform:translateY(-7px) rotate(4deg)}
+}
+@keyframes pulse {from{opacity:.65}to{opacity:1}}
+.composer {
+  display:flex;gap:9px;align-items:flex-end;padding:12px;
+  border-top:1px solid var(--border);
+}
+textarea {
+  flex:1;min-width:0;resize:vertical;min-height:45px;max-height:120px;
+  padding:12px;background:#081525;color:var(--text);
+  border:1px solid var(--border);border-radius:11px;font:inherit;
+}
+textarea:focus,input:focus,select:focus {outline:1px solid var(--cyan)}
+.hint {font-size:12px;color:var(--muted);padding:0 13px 13px}
+.saved-item {
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.saved-item:last-child {border-bottom:0}
+.saved-answer {white-space:pre-wrap;line-height:1.5;margin:8px 0}
+.small {font-size:12px}
+.empty {padding:12px 0;color:var(--muted)}
+footer {text-align:center;color:var(--muted);font-size:12px;padding:20px 0}
+[hidden] {display:none!important}
+@media(max-width:520px) {
+  .container {padding:15px 10px}
+  .grid {grid-template-columns:1fr 1fr}
+  h1 {font-size:22px}
+  .hero {padding:16px}
+  .messages {padding:11px}
+  .composer {padding:9px}
+  .mascot {width:40px;height:40px}
+}
+</style>
 </head>
 <body>
-  <main class="container">
-    <header>
-      <div class="logo">🤖</div>
-      <div>
-        <h1>GAMEBOT <span>AZ</span></h1>
-        <p class="subtitle">Ton assistant gaming, avec AZerty !</p>
-      </div>
-    </header>
-
-    <section class="intro">
-      <h2>🎮 Progresse dans tes jeux préférés</h2>
-      <p>
-        Besoin d'aide sur un jeu ? Pose ta question à AZerty :
-        astuces, explications, stratégies et conseils pour progresser.
-      </p>
-    </section>
-
-    <h2 class="section-title">Choisis ton jeu</h2>
-    <div class="games">
-      <button class="game" type="button" data-game="Roblox">🎲 Roblox</button>
-      <button class="game" type="button" data-game="Brawl Stars">⭐ Brawl Stars</button>
-      <button class="game" type="button" data-game="Fortnite">🎯 Fortnite</button>
-      <button class="game" type="button" data-game="Minecraft">⛏️ Minecraft</button>
-      <button class="game" type="button" data-game="Rocket League">🚗 Rocket League</button>
+<main class="container">
+  <header>
+    <div class="logo">🤖</div>
+    <div>
+      <h1>GAMEBOT <span>AZ</span></h1>
+      <p class="subtitle">Ton assistant gaming avec AZerty !</p>
     </div>
+  </header>
 
-    <section class="chat">
-      <div class="chat-header">
-        <div class="chat-title">
-          <span>
-            💬 Discussion avec AZerty
-            <div class="status">● Assistant prêt à t'aider</div>
-          </span>
+  <section class="panel hero">
+    <h2>🎮 Progresse dans tes jeux préférés</h2>
+    <p class="muted">Apprends, découvre des astuces et améliore ton niveau avec AZerty.</p>
+    <div class="actions">
+      <button class="primary" id="goChat">Parler à AZerty ↗</button>
+      <button class="secondary" id="goProfile">Mon profil</button>
+    </div>
+  </section>
+
+  <h2 class="section-title">📊 Ma progression</h2>
+  <section class="grid">
+    <div class="stat">Niveau<strong id="level">1</strong></div>
+    <div class="stat">XP gagnée<strong id="xp">0</strong></div>
+    <div class="stat">Questions posées<strong id="questionsCount">0</strong></div>
+    <div class="stat">Réponses favorites<strong id="favoritesCount">0</strong></div>
+  </section>
+  <section class="panel" style="margin-top:12px">
+    <div style="display:flex;justify-content:space-between;gap:8px">
+      <strong>Progression vers le niveau suivant</strong>
+      <span id="progressText" class="cyan">0 / 100 XP</span>
+    </div>
+    <div style="height:9px;background:#081525;border-radius:20px;margin-top:12px;overflow:hidden">
+      <div id="progressBar" style="height:100%;width:0%;background:var(--cyan);transition:width .3s"></div>
+    </div>
+    <p id="progressMessage" class="muted small">Pose ta première question pour commencer !</p>
+  </section>
+
+  <h2 class="section-title">🎮 Choisis ton jeu</h2>
+  <div class="games" id="games">
+    <button class="game" data-game="Roblox">🎲 Roblox</button>
+    <button class="game" data-game="Brawl Stars">⭐ Brawl Stars</button>
+    <button class="game" data-game="Fortnite">🎯 Fortnite</button>
+    <button class="game" data-game="Minecraft">⛏️ Minecraft</button>
+    <button class="game" data-game="Rocket League">🚗 Rocket League</button>
+  </div>
+
+  <h2 class="section-title">🤖 Ton espace AZerty</h2>
+  <nav class="tabs" aria-label="Sections du site">
+    <button class="tab active" data-tab="chat">💬 Discussion</button>
+    <button class="tab" data-tab="profile">👤 Profil</button>
+    <button class="tab" data-tab="favorites">⭐ Favoris</button>
+  </nav>
+
+  <section id="chatPanel" class="panel chat" style="margin-top:12px">
+    <div class="chat-header">
+      <div>
+        <div class="chat-title">Discussion avec AZerty</div>
+        <div class="status" id="status">● Prêt à t'aider</div>
+      </div>
+      <button class="secondary small" id="clearChat">Nouvelle discussion</button>
+    </div>
+    <div class="messages" id="messages" aria-live="polite">
+      <div class="msg bot">
+        <img class="mascot" src="./mascotte.png" alt="AZerty">
+        <div class="bot-text" id="welcomeText">
+          Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮
         </div>
-        <button class="small-button" id="clear" type="button">Effacer</button>
       </div>
+    </div>
+    <div class="actions" style="padding:0 13px 12px">
+      <button class="secondary quick" data-prompt="Donne-moi une astuce pour progresser dans mon jeu.">💡 Une astuce</button>
+      <button class="secondary quick" data-prompt="Explique-moi comment débuter dans mon jeu.">🚀 Débuter</button>
+      <button class="secondary quick" data-prompt="Propose-moi un petit défi gaming.">🏆 Un défi</button>
+    </div>
+    <form class="composer" id="form">
+      <textarea id="question" maxlength="1500" placeholder="Écris à AZerty..." required></textarea>
+      <button class="primary" id="send" type="submit">Envoyer</button>
+    </form>
+    <div class="hint">AZerty peut se tromper. Vérifie les informations importantes.</div>
+  </section>
 
-      <div class="messages" id="messages" aria-live="polite">
-        <div class="msg bot">
-          <img class="mascot" src="./mascotte.png" alt="AZerty"
-               onerror="this.style.display='none'">
-          <div class="bot-text">
-            Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮
-          </div>
-        </div>
+  <section id="profilePanel" class="panel" style="margin-top:12px" hidden>
+    <h2>👤 Mon profil joueur</h2>
+    <p class="muted">Choisis ton pseudo et ton jeu favori. Tes données sont sauvegardées sur ce navigateur.</p>
+    <form id="profileForm">
+      <div class="field">
+        <label for="nickname">Ton pseudo</label>
+        <input id="nickname" maxlength="24" placeholder="Ex. AZertyFan">
       </div>
-
-      <form class="composer" id="form">
-        <textarea id="question" maxlength="1500"
-          placeholder="Pose ta question à AZerty..." required></textarea>
-        <button class="send" id="send" type="submit">Envoyer</button>
-      </form>
-      <div class="hint">
-        AZerty peut se tromper : vérifie les informations importantes.
-        La discussion est conservée uniquement dans cette page ouverte.
+      <div class="field">
+        <label for="favoriteGame">Mon jeu préféré</label>
+        <select id="favoriteGame">
+          <option>Roblox</option>
+          <option>Brawl Stars</option>
+          <option>Fortnite</option>
+          <option>Minecraft</option>
+          <option>Rocket League</option>
+          <option>Autre</option>
+        </select>
       </div>
-    </section>
+      <button class="primary" type="submit">Enregistrer mon profil</button>
+    </form>
+    <p id="profileMessage" class="muted small" aria-live="polite"></p>
+    <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
+    <h3>Mes données</h3>
+    <p class="muted small">Ton profil, tes favoris et ton XP restent sur cet appareil et ce navigateur. Ils ne sont pas synchronisés avec un compte en ligne.</p>
+    <button class="secondary danger" id="resetProgress" type="button">Réinitialiser ma progression</button>
+  </section>
 
-    <footer>GameBot AZ · Apprends, joue et progresse avec AZerty 🎮</footer>
-  </main>
+  <section id="favoritesPanel" class="panel" style="margin-top:12px" hidden>
+    <h2>⭐ Mes réponses favorites</h2>
+    <p class="muted">Enregistre les conseils que tu veux retrouver plus tard.</p>
+    <div id="favoritesList"><p class="empty">Tu n'as pas encore de favoris.</p></div>
+  </section>
 
-  <script>
-    const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
+  <footer>GameBot AZ · Apprends, joue et progresse avec AZerty 🎮</footer>
+</main>
 
-    const messagesEl = document.getElementById("messages");
-    const form = document.getElementById("form");
-    const input = document.getElementById("question");
-    const sendButton = document.getElementById("send");
-    const clearButton = document.getElementById("clear");
-    const gameButtons = document.querySelectorAll(".game");
+<script>
+const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
+const STORAGE_KEY = "gamebotAzPlayerV1";
 
-    // Historique temporaire : il disparaît si la page est rechargée.
-    let history = [];
-    let selectedGame = "";
+const $ = id => document.getElementById(id);
+const messagesEl = $("messages");
+const input = $("question");
+const sendButton = $("send");
 
-    function scrollToBottom() {
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
+let selectedGame = "";
+let history = [];
+let waiting = false;
+let player = loadPlayer();
 
-    function addMessage(role, content, options = {}) {
-      const row = document.createElement("div");
-      row.className = "msg " + (role === "user" ? "user" : "bot");
+function defaultPlayer() {
+  return {
+    nickname: "",
+    favoriteGame: "Roblox",
+    xp: 0,
+    questions: 0,
+    favorites: []
+  };
+}
 
-      if (role === "assistant") {
-        if (options.thinking) row.classList.add("thinking");
+function loadPlayer() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!stored || typeof stored !== "object") return defaultPlayer();
+    return {
+      ...defaultPlayer(),
+      ...stored,
+      xp: Math.max(0, Number(stored.xp) || 0),
+      questions: Math.max(0, Number(stored.questions) || 0),
+      favorites: Array.isArray(stored.favorites) ? stored.favorites : []
+    };
+  } catch {
+    return defaultPlayer();
+  }
+}
 
-        const mascot = document.createElement("img");
-        mascot.className = "mascot";
-        mascot.src = "./mascotte.png";
-        mascot.alt = "AZerty";
-        mascot.onerror = () => { mascot.style.display = "none"; };
+function savePlayer() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(player));
+    return true;
+  } catch {
+    $("profileMessage").textContent =
+      "La sauvegarde locale est indisponible dans ce navigateur.";
+    return false;
+  }
+}
 
-        const text = document.createElement("div");
-        text.className = "bot-text";
-        text.textContent = content;
+function levelForXP(xp) {
+  return Math.floor(xp / 100) + 1;
+}
 
-        row.append(mascot, text);
-      } else {
-        row.textContent = content;
-      }
+function updateDashboard() {
+  const level = levelForXP(player.xp);
+  const currentXP = player.xp % 100;
 
-      messagesEl.appendChild(row);
-      scrollToBottom();
-      return row;
-    }
+  $("level").textContent = level;
+  $("xp").textContent = player.xp;
+  $("questionsCount").textContent = player.questions;
+  $("favoritesCount").textContent = player.favorites.length;
+  $("progressText").textContent = currentXP + " / 100 XP";
+  $("progressBar").style.width = currentXP + "%";
+  $("progressMessage").textContent = currentXP === 0
+    ? "Nouveau niveau ! Continue à apprendre avec AZerty."
+    : "Encore " + (100 - currentXP) + " XP avant le prochain niveau.";
 
-    gameButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        selectedGame = button.dataset.game;
-        gameButtons.forEach(b => b.classList.toggle("active", b === button));
-        input.value = "Aide-moi à progresser sur " + selectedGame + ".";
-        input.focus();
-      });
+  $("nickname").value = player.nickname;
+  $("favoriteGame").value = player.favoriteGame;
+  renderFavorites();
+}
+
+function renderFavorites() {
+  const list = $("favoritesList");
+  list.replaceChildren();
+
+  if (!player.favorites.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.textContent = "Tu n'as pas encore de favoris.";
+    list.appendChild(empty);
+    return;
+  }
+
+  player.favorites.forEach((favorite, index) => {
+    const item = document.createElement("article");
+    item.className = "saved-item";
+
+    const title = document.createElement("strong");
+    title.textContent = favorite.game || "Conseil gaming";
+
+    const question = document.createElement("p");
+    question.className = "muted small";
+    question.textContent = "Question : " + favorite.question;
+
+    const answer = document.createElement("p");
+    answer.className = "saved-answer";
+    answer.textContent = favorite.answer;
+
+    const remove = document.createElement("button");
+    remove.className = "secondary danger small";
+    remove.textContent = "Retirer des favoris";
+    remove.addEventListener("click", () => {
+      player.favorites.splice(index, 1);
+      savePlayer();
+      updateDashboard();
     });
 
-    form.addEventListener("submit", async event => {
-      event.preventDefault();
+    item.append(title, question, answer, remove);
+    list.appendChild(item);
+  });
+}
 
-      const typedQuestion = input.value.trim();
-      if (!typedQuestion || sendButton.disabled) return;
+function switchTab(tab) {
+  $("chatPanel").hidden = tab !== "chat";
+  $("profilePanel").hidden = tab !== "profile";
+  $("favoritesPanel").hidden = tab !== "favorites";
 
-      const question = selectedGame && !typedQuestion.toLowerCase().includes(selectedGame.toLowerCase())
-        ? "Mon jeu est " + selectedGame + ". " + typedQuestion
-        : typedQuestion;
+  document.querySelectorAll("[data-tab]").forEach(button => {
+    button.classList.toggle("active", button.dataset.tab === tab);
+  });
 
-      addMessage("user", typedQuestion);
-      input.value = "";
-      sendButton.disabled = true;
-      sendButton.textContent = "...";
+  if (tab === "chat") input.focus();
+}
 
-      const thinkingRow = addMessage("assistant", "AZerty réfléchit...", { thinking: true });
+document.querySelectorAll("[data-tab]").forEach(button => {
+  button.addEventListener("click", () => switchTab(button.dataset.tab));
+});
 
-      // Envoyer les derniers messages pour garder le contexte.
-      const messagesToSend = [
-        ...history,
-        { role: "user", content: question }
-      ].slice(-12);
+$("goChat").addEventListener("click", () => {
+  switchTab("chat");
+  $("chatPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
-      try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            question,
-            messages: messagesToSend
-          })
-        });
+$("goProfile").addEventListener("click", () => {
+  switchTab("profile");
+  $("profilePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
-        let data;
-        try {
-          data = await response.json();
-        } catch {
-          throw new Error("Le serveur a renvoyé une réponse illisible.");
-        }
+document.querySelectorAll(".game").forEach(button => {
+  button.addEventListener("click", () => {
+    selectedGame = button.dataset.game;
+    player.favoriteGame = selectedGame;
+    savePlayer();
+    updateDashboard();
 
-        if (!response.ok) {
-          throw new Error(data.error || "Le serveur a rencontré un problème.");
-        }
+    document.querySelectorAll(".game").forEach(item => {
+      item.classList.toggle("active", item === button);
+    });
 
-        const answer = typeof data.answer === "string"
-          ? data.answer
-          : "Je n'ai pas réussi à générer une réponse.";
+    switchTab("chat");
+    input.value = "Aide-moi à progresser sur " + selectedGame + ".";
+    input.focus();
+  });
+});
 
-        thinkingRow.remove();
-        addMessage("assistant", answer);
+$("profileForm").addEventListener("submit", event => {
+  event.preventDefault();
+  player.nickname = $("nickname").value.trim().slice(0, 24);
+  player.favoriteGame = $("favoriteGame").value;
+  savePlayer();
+  updateDashboard();
 
-        history = [
-          ...messagesToSend,
-          { role: "assistant", content: answer }
-        ].slice(-12);
-      } catch (error) {
-        thinkingRow.remove();
-        addMessage(
-          "assistant",
-          "Oups ! Je n'arrive pas à contacter le serveur. Vérifie ta connexion et réessaie. Si le problème continue, vérifie le déploiement Cloudflare."
+  $("profileMessage").textContent = "Profil enregistré sur cet appareil ! 🎮";
+});
+
+$("resetProgress").addEventListener("click", () => {
+  if (!confirm("Réinitialiser ton XP, tes questions et tes favoris ? Cette action est définitive.")) return;
+
+  player.xp = 0;
+  player.questions = 0;
+  player.favorites = [];
+  savePlayer();
+  updateDashboard();
+  $("profileMessage").textContent = "Ta progression a été réinitialisée.";
+});
+
+function addMessage(role, content, options = {}) {
+  const row = document.createElement("div");
+  row.className = "msg " + (role === "user" ? "user" : "bot");
+  if (options.thinking) row.classList.add("thinking");
+
+  if (role === "user") {
+    row.textContent = content;
+  } else {
+    const mascot = document.createElement("img");
+    mascot.className = "mascot";
+    mascot.src = "./mascotte.png";
+    mascot.alt = "AZerty";
+    mascot.onerror = () => { mascot.style.display = "none"; };
+
+    const text = document.createElement("div");
+    text.className = "bot-text";
+    text.textContent = content;
+    row.append(mascot, text);
+
+    if (options.favoriteAnswer) {
+      const favoriteButton = document.createElement("button");
+      favoriteButton.className = "secondary small";
+      favoriteButton.textContent = isFavorite(options.favoriteAnswer)
+        ? "⭐ Enregistré"
+        : "☆ Ajouter aux favoris";
+
+      favoriteButton.addEventListener("click", () => {
+        const entry = options.favoriteAnswer;
+        const index = player.favorites.findIndex(item =>
+          item.question === entry.question && item.answer === entry.answer
         );
-        console.error("Erreur GameBot AZ :", error);
-      } finally {
-        sendButton.disabled = false;
-        sendButton.textContent = "Envoyer";
-        input.focus();
+
+        if (index >= 0) {
+          player.favorites.splice(index, 1);
+        } else {
+          player.favorites.unshift({
+            ...entry,
+            id: Date.now(),
+            game: entry.game || selectedGame || player.favoriteGame
+          });
+          player.favorites = player.favorites.slice(0, 100);
+        }
+
+        savePlayer();
+        updateDashboard();
+        favoriteButton.textContent = isFavorite(entry)
+          ? "⭐ Enregistré"
+          : "☆ Ajouter aux favoris";
+      });
+
+      text.appendChild(document.createElement("br"));
+      text.appendChild(favoriteButton);
+    }
+  }
+
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return row;
+}
+
+function isFavorite(entry) {
+  return player.favorites.some(item =>
+    item.question === entry.question && item.answer === entry.answer
+  );
+}
+
+function greet() {
+  const name = player.nickname ? " " + player.nickname : "";
+  $("welcomeText").textContent =
+    "Bonjour" + name + " ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
+}
+
+document.querySelectorAll(".quick").forEach(button => {
+  button.addEventListener("click", () => {
+    input.value = button.dataset.prompt;
+    input.focus();
+  });
+});
+
+$("clearChat").addEventListener("click", () => {
+  history = [];
+  messagesEl.replaceChildren();
+
+  const row = document.createElement("div");
+  row.className = "msg bot";
+
+  const mascot = document.createElement("img");
+  mascot.className = "mascot";
+  mascot.src = "./mascotte.png";
+  mascot.alt = "AZerty";
+  mascot.onerror = () => { mascot.style.display = "none"; };
+
+  const text = document.createElement("div");
+  text.className = "bot-text";
+  const name = player.nickname ? " " + player.nickname : "";
+  text.textContent =
+    "Bonjour" + name + " ! Nouvelle discussion ? Je suis AZerty 🎮 Que veux-tu apprendre aujourd'hui ?";
+
+  row.append(mascot, text);
+  messagesEl.appendChild(row);
+  $("status").textContent = "● Nouvelle discussion";
+});
+
+$("form").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (waiting) return;
+
+  const typed = input.value.trim();
+  if (!typed) return;
+
+  const question = selectedGame && !typed.toLowerCase().includes(selectedGame.toLowerCase())
+    ? "Mon jeu est " + selectedGame + ". " + typed
+    : typed;
+
+  addMessage("user", typed);
+  input.value = "";
+  waiting = true;
+  sendButton.disabled = true;
+  sendButton.textContent = "...";
+  $("status").textContent = "● AZerty réfléchit...";
+
+  const thinking = addMessage("assistant", "AZerty réfléchit...", { thinking: true });
+
+  const userMessage = {
+    role: "user",
+    content: (player.nickname ? "Le pseudo du joueur est " + player.nickname + ". " : "") +
+      "Son jeu préféré est " + player.favoriteGame + ". " + question
+  };
+
+  const outgoing = [...history, userMessage].slice(-12);
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: userMessage.content,
+        messages: outgoing
+      })
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("Réponse serveur illisible");
+    }
+
+    if (!response.ok) throw new Error(data.error || "Erreur serveur");
+
+    const answer = typeof data.answer === "string"
+      ? data.answer
+      : "Je n'ai pas réussi à préparer une réponse.";
+
+    thinking.remove();
+    addMessage("assistant", answer, {
+      favoriteAnswer: {
+        question: typed,
+        answer,
+        game: selectedGame || player.favoriteGame
       }
     });
 
-    clearButton.addEventListener("click", () => {
-      history = [];
-      selectedGame = "";
-      gameButtons.forEach(button => button.classList.remove("active"));
-      messagesEl.replaceChildren();
+    history = [
+      ...outgoing,
+      { role: "assistant", content: answer }
+    ].slice(-12);
 
-      const row = document.createElement("div");
-      row.className = "msg bot";
+    player.questions += 1;
+    player.xp += 10;
+    savePlayer();
+    updateDashboard();
 
-      const mascot = document.createElement("img");
-      mascot.className = "mascot";
-      mascot.src = "./mascotte.png";
-      mascot.alt = "AZerty";
-      mascot.onerror = () => { mascot.style.display = "none"; };
+    $("status").textContent = "● AZerty est prêt";
+  } catch (error) {
+    thinking.remove();
+    addMessage("assistant",
+      "Oups ! Je n'arrive pas à contacter le serveur. Vérifie ta connexion et le déploiement Cloudflare.");
+    $("status").textContent = "● Connexion à vérifier";
+    console.error(error);
+  } finally {
+    waiting = false;
+    sendButton.disabled = false;
+    sendButton.textContent = "Envoyer";
+  }
+});
 
-      const text = document.createElement("div");
-      text.className = "bot-text";
-      text.textContent = "Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
-
-      row.append(mascot, text);
-      messagesEl.appendChild(row);
-      input.value = "";
-    });
-  </script>
+updateDashboard();
+greet();
+</script>
 </body>
 </html>
