@@ -6,142 +6,291 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GameBot AZ - Assistant Gaming</title>
 <meta name="theme-color" content="#080d1b">
+<meta name="description" content="GameBot AZ, ton assistant gaming IA gratuit pour Roblox, Brawl Stars, Fortnite, Minecraft et plus encore.">
 <style>
 *{box-sizing:border-box}
 :root{color-scheme:dark}
-body{margin:0;background:#080d1b;color:#edf4ff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
-header{padding:20px 16px;text-align:center;background:linear-gradient(135deg,#101c37,#092d42);border-bottom:1px solid #173a55}
+body{
+margin:0;background:#080d1b;color:#edf4ff;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+min-height:100vh
+}
+header{
+padding:20px 16px;text-align:center;
+background:linear-gradient(135deg,#101c37,#092d42);
+border-bottom:1px solid #173a55
+}
 .logo{font-size:30px;font-weight:900;letter-spacing:1px}
 .logo span{color:#28d9f5}
 header p{color:#9bb1ca;margin:8px 0 0;font-size:14px}
 main{max-width:760px;margin:auto;padding:18px 14px}
 h2{font-size:19px;margin:22px 0 12px}
-.intro{padding:18px;border-radius:18px;background:linear-gradient(135deg,#10203a,#0b2637);border:1px solid #1b4964}
+.intro{
+padding:18px;border-radius:18px;
+background:linear-gradient(135deg,#10203a,#0b2637);
+border:1px solid #1b4964
+}
 .intro h1{font-size:25px;margin:0 0 10px}
 .intro p{color:#b7c8dc;line-height:1.5;margin:0}
 .games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.game{background:#10192b;border:1px solid #263751;border-radius:12px;padding:14px 10px;color:white;font-size:15px;font-weight:700;cursor:pointer}
+.game{
+background:#10192b;border:1px solid #263751;
+border-radius:12px;padding:14px 10px;color:white;
+font-size:15px;font-weight:700;cursor:pointer
+}
 .game:active{transform:scale(.98);border-color:#28d9f5}
-.chat{margin-top:12px;background:#0d1525;border:1px solid #23354d;border-radius:16px;padding:12px;min-height:240px}
-.messages{display:flex;flex-direction:column;gap:12px;max-height:390px;overflow-y:auto}
-.msg{padding:12px 14px;border-radius:14px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;font-size:14px}
+.chat{
+margin-top:12px;background:#0d1525;
+border:1px solid #23354d;border-radius:16px;
+padding:12px;min-height:240px
+}
+.messages{
+display:flex;flex-direction:column;gap:12px;
+max-height:390px;overflow-y:auto
+}
+.msg{
+padding:12px 14px;border-radius:14px;
+white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;
+font-size:14px
+}
 .bot{background:#17243a;align-self:flex-start;max-width:95%}
 .user{background:#075b75;align-self:flex-end;max-width:95%}
 form{display:flex;gap:8px;margin-top:14px}
-input{min-width:0;flex:1;padding:13px;border-radius:12px;border:1px solid #31445e;background:#080f1d;color:white;font-size:16px}
-button{border:0;border-radius:12px;background:#20c7e7;color:#04111b;font-weight:800;padding:12px 15px;font-size:14px;cursor:pointer}
+input{
+min-width:0;flex:1;padding:13px;border-radius:12px;
+border:1px solid #31445e;background:#080f1d;color:white;
+font-size:16px
+}
+button{
+border:0;border-radius:12px;background:#20c7e7;
+color:#04111b;font-weight:800;padding:12px 15px;
+font-size:14px;cursor:pointer
+}
 button:disabled,input:disabled{opacity:.65}
-.secondary{background:#17243a;color:#d9e8fa;border:1px solid #30435d}
+.secondary{
+background:#17243a;color:#d9e8fa;
+border:1px solid #30435d
+}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .actions button{flex:1}
 .small{font-size:12px;color:#8499b5;line-height:1.5}
 footer{text-align:center;padding:24px 14px;color:#8499b5;font-size:12px}
-@media(min-width:600px){.games{grid-template-columns:repeat(3,minmax(0,1fr))}.intro h1{font-size:32px}}
+
+.mascot{
+width:48px;height:48px;flex-shrink:0;
+display:inline-flex;align-items:center;justify-content:center;
+border-radius:15px;
+background:linear-gradient(145deg,#102d4b,#075b75);
+border:1px solid #28d9f5;
+box-shadow:0 0 18px #20c7e720;
+}
+.mascot svg{width:42px;height:42px}
+.mascot-face{transform-origin:center;animation:mascot-bob 2s ease-in-out infinite}
+.mascot-eye{fill:#baf8ff}
+.mascot-core{fill:#20c7e7}
+@keyframes mascot-bob{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-3px)}
+}
+.thinking{
+display:flex;align-items:center;gap:10px;
+}
+.thinking-text{display:flex;flex-direction:column;gap:4px}
+.thinking-text strong{color:#e8faff;font-size:13px}
+.thinking-text span{color:#8ca9c7;font-size:12px}
+.thinking .mascot{animation:mascot-glow 1.5s ease-in-out infinite}
+@keyframes mascot-glow{
+0%,100%{box-shadow:0 0 10px #20c7e720}
+50%{box-shadow:0 0 22px #20c7e760}
+}
+@media(prefers-reduced-motion:reduce){
+.mascot-face,.thinking .mascot{animation:none}
+}
+@media(min-width:600px){
+.games{grid-template-columns:repeat(3,minmax(0,1fr))}
+.intro h1{font-size:32px}
+}
 </style>
 </head>
 <body>
 <header>
-<div class="logo">GAMEBOT <span>AZ</span> 🤖</div>
-<p>Ton assistant gaming, gratuitement.</p>
+  <div class="logo">GAMEBOT <span>AZ</span></div>
+  <p>Ton assistant gaming, gratuitement.</p>
 </header>
+
 <main>
-<section class="intro">
-<h1>Le gaming, plus facile. 🎮</h1>
-<p>Pose tes questions, découvre des astuces et progresse sur tes jeux préférés. Choisis un jeu ou écris directement ta question.</p>
-</section>
-<h2>🎮 Choisis ton jeu</h2>
-<div class="games">
-<button class="game" type="button" data-q="Donne-moi des conseils pour Roblox">🟦 Roblox</button>
-<button class="game" type="button" data-q="Comment progresser sur Brawl Stars ?">⭐ Brawl Stars</button>
-<button class="game" type="button" data-q="Donne-moi des conseils pour Fortnite">🔫 Fortnite</button>
-<button class="game" type="button" data-q="Comment bien débuter Minecraft ?">⛏️ Minecraft</button>
-<button class="game" type="button" data-q="Donne-moi des conseils pour Rocket League">🚗 Rocket League</button>
-<button class="game" type="button" data-q="Donne-moi des conseils gaming généraux">🎯 Autres jeux</button>
-</div>
-<h2>💬 Discute avec GameBot AZ</h2>
-<section class="chat">
-<div id="chat" class="messages" aria-live="polite">
-<div class="msg bot">Salut ! 👋 Je suis GameBot AZ.
+  <section class="intro">
+    <h1>Le gaming, plus facile. 🎮</h1>
+    <p>Pose tes questions, découvre des astuces et progresse sur tes jeux préférés. Choisis un jeu ou écris directement ta question.</p>
+  </section>
+
+  <h2>🎮 Choisis ton jeu</h2>
+  <div class="games">
+    <button class="game" type="button" data-q="Donne-moi des conseils pour Roblox">🟦 Roblox</button>
+    <button class="game" type="button" data-q="Comment progresser sur Brawl Stars ?">⭐ Brawl Stars</button>
+    <button class="game" type="button" data-q="Donne-moi des conseils pour Fortnite">🔫 Fortnite</button>
+    <button class="game" type="button" data-q="Comment bien débuter Minecraft ?">⛏️ Minecraft</button>
+    <button class="game" type="button" data-q="Donne-moi des conseils pour Rocket League">🚗 Rocket League</button>
+    <button class="game" type="button" data-q="Donne-moi des conseils gaming généraux">🎯 Autres jeux</button>
+  </div>
+
+  <h2>💬 Discute avec GameBot AZ</h2>
+  <section class="chat">
+    <div id="chat" class="messages" aria-live="polite">
+      <div class="msg bot">Salut ! 👋 Je suis GameBot AZ.
 
 Je peux t'aider avec Roblox, Brawl Stars, Fortnite, Minecraft et d'autres jeux.
 
 Écris ta question ci-dessous pour commencer !</div>
-</div>
-<form id="form">
-<input id="question" type="text" placeholder="Pose ta question gaming..." autocomplete="off" required maxlength="1000">
-<button id="send" type="submit">Envoyer ➤</button>
-</form>
-<div class="actions">
-<button class="secondary" id="clear" type="button">Effacer la discussion</button>
-</div>
-</section>
-<h2>💡 Exemples de questions</h2>
-<div class="games">
-<button class="game" type="button" data-q="Comment réduire les lags sur mobile ?">📱 Réduire les lags</button>
-<button class="game" type="button" data-q="Comment protéger mon compte gaming ?">🔐 Protéger mon compte</button>
-<button class="game" type="button" data-q="Comment progresser plus vite sur Roblox ?">🚀 Progresser</button>
-</div>
-<p class="small">GameBot AZ utilise une IA pour générer ses réponses. Elle peut parfois se tromper. Ne partage jamais ton mot de passe ni tes codes de vérification.</p>
+    </div>
+    <form id="form">
+      <input id="question" type="text" placeholder="Pose ta question gaming..." autocomplete="off" required maxlength="1000">
+      <button id="send" type="submit">Envoyer ➤</button>
+    </form>
+    <div class="actions">
+      <button class="secondary" id="clear" type="button">Effacer la discussion</button>
+    </div>
+  </section>
+
+  <h2>💡 Exemples de questions</h2>
+  <div class="games">
+    <button class="game" type="button" data-q="Comment réduire les lags sur mobile ?">📱 Réduire les lags</button>
+    <button class="game" type="button" data-q="Comment protéger mon compte gaming ?">🔐 Protéger mon compte</button>
+    <button class="game" type="button" data-q="Comment progresser plus vite sur Roblox ?">🚀 Progresser</button>
+  </div>
+  <p class="small">GameBot AZ utilise une IA pour générer ses réponses. Elle peut parfois se tromper et ne vérifie pas automatiquement les dernières mises à jour des jeux. Ne partage jamais ton mot de passe ni tes codes de vérification.</p>
 </main>
+
 <footer>GameBot AZ · Assistant gaming</footer>
+
 <script>
-const API_URL="https://gamebot-az-api.pokebrocant.workers.dev/";
-const chat=document.getElementById("chat");
-const input=document.getElementById("question");
-const form=document.getElementById("form");
-const sendButton=document.getElementById("send");
+const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
+const chat = document.getElementById("chat");
+const input = document.getElementById("question");
+const form = document.getElementById("form");
+const sendButton = document.getElementById("send");
 
-function say(text,who){
-const div=document.createElement("div");
-div.className="msg "+who;
-div.textContent=text;
-chat.appendChild(div);
-chat.scrollTop=chat.scrollHeight;
-return div;
+// Historique envoyé à l'IA pour garder le contexte.
+let history = [];
+
+const mascotSVG = `
+<svg viewBox="0 0 64 64" role="img" aria-label="Mascotte GameBot AZ">
+ <defs>
+  <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1">
+   <stop offset="0%" stop-color="#39e7ff"/>
+   <stop offset="100%" stop-color="#1678d3"/>
+  </linearGradient>
+ </defs>
+ <g class="mascot-face">
+  <path d="M32 5v7" stroke="#42e8ff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="32" cy="5" r="3" fill="#e5fbff"/>
+  <rect x="10" y="14" width="44" height="36" rx="12"
+        fill="url(#shell)" stroke="#8bf3ff" stroke-width="1.5"/>
+  <rect x="16" y="21" width="32" height="22" rx="8" fill="#08182d"/>
+  <ellipse class="mascot-eye" cx="24" cy="31" rx="3.5" ry="4"/>
+  <ellipse class="mascot-eye" cx="40" cy="31" rx="3.5" ry="4"/>
+  <path d="M26 38q6 5 12 0" fill="none" stroke="#20c7e7"
+        stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M10 27H5v12h5M54 27h5v12h-5"
+        fill="none" stroke="#39e7ff" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="20" y="50" width="24" height="5" rx="2.5" fill="#1678d3"/>
+ </g>
+</svg>`;
+
+function say(text, who) {
+  const div = document.createElement("div");
+  div.className = "msg " + who;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
 }
 
-async function ask(question){
-const q=question.trim();
-if(!q||input.disabled)return;
-say(q,"user");
-input.value="";
-input.disabled=true;
-sendButton.disabled=true;
-const loading=say("🤖 GameBot AZ réfléchit...","bot");
-try{
-const response=await fetch(API_URL,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({question:q})
-});
-const data=await response.json();
-if(!response.ok)throw new Error(data.error||"Erreur "+response.status);
-loading.textContent=data.answer||"Je n'ai pas reçu de réponse.";
-}catch(error){
-console.error("GameBot AZ :",error);
-loading.textContent="Oups ! Impossible de joindre l'IA. Réessaie dans un instant.";
-}finally{
-input.disabled=false;
-sendButton.disabled=false;
-input.focus();
-chat.scrollTop=chat.scrollHeight;
-}
+function showThinking() {
+  const div = document.createElement("div");
+  div.className = "msg bot thinking";
+  div.innerHTML = `
+    <span class="mascot">${mascotSVG}</span>
+    <span class="thinking-text">
+      <strong>GameBot AZ réfléchit...</strong>
+      <span>Je prépare ma réponse gaming</span>
+    </span>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
 }
 
-form.addEventListener("submit",function(event){
-event.preventDefault();
-ask(input.value);
+async function ask(question) {
+  const q = question.trim();
+  if (!q || input.disabled) return;
+
+  say(q, "user");
+  input.value = "";
+  input.disabled = true;
+  sendButton.disabled = true;
+
+  const loading = showThinking();
+
+  // On garde les derniers échanges pour limiter la taille des requêtes.
+  history.push({ role: "user", content: q });
+  history = history.slice(-12);
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: history })
+    });
+
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error("Le serveur a renvoyé une réponse invalide.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data.error || "Erreur du serveur (" + response.status + ").");
+    }
+
+    const answer = data.answer || "Je n'ai pas reçu de réponse.";
+    loading.remove();
+    say(answer, "bot");
+
+    // La réponse est conservée pour que l'IA s'en souvienne au prochain message.
+    history.push({ role: "assistant", content: answer });
+    history = history.slice(-12);
+
+  } catch (error) {
+    console.error("GameBot AZ :", error);
+    loading.remove();
+    say("Oups ! Impossible de joindre l'IA pour le moment. Réessaie dans un instant.", "bot");
+
+    // En cas d'échec, on retire la question qui n'a pas reçu de réponse.
+    history.pop();
+  } finally {
+    input.disabled = false;
+    sendButton.disabled = false;
+    input.focus();
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  ask(input.value);
 });
 
-document.querySelectorAll("[data-q]").forEach(function(button){
-button.addEventListener("click",function(){
-ask(button.dataset.q);
-});
+document.querySelectorAll("[data-q]").forEach(function(button) {
+  button.addEventListener("click", function() {
+    ask(button.dataset.q);
+  });
 });
 
-document.getElementById("clear").addEventListener("click",function(){
-chat.replaceChildren();
-say("Conversation effacée ! 👋 Choisis un jeu et pose ta prochaine question.","bot");
+document.getElementById("clear").addEventListener("click", function() {
+  history = [];
+  chat.replaceChildren();
+  say("Discussion effacée ! 👋 Je suis prêt pour une nouvelle conversation.", "bot");
 });
 </script>
 </body>
