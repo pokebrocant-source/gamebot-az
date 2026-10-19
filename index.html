@@ -6,80 +6,155 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GameBot AZ - Assistant Gaming</title>
 <meta name="theme-color" content="#080d1b">
+
 <style>
 *{box-sizing:border-box}
 :root{color-scheme:dark}
+
 body{
-margin:0;background:#080d1b;color:#edf4ff;
+margin:0;
+background:#080d1b;
+color:#edf4ff;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 min-height:100vh
 }
+
 header{
-padding:20px 16px;text-align:center;
+padding:20px 16px;
+text-align:center;
 background:linear-gradient(135deg,#101c37,#092d42);
 border-bottom:1px solid #173a55
 }
+
 .logo{font-size:30px;font-weight:900;letter-spacing:1px}
 .logo span{color:#28d9f5}
 header p{color:#9bb1ca;margin:8px 0 0;font-size:14px}
+
 main{max-width:760px;margin:auto;padding:18px 14px}
 h2{font-size:19px;margin:22px 0 12px}
+
 .intro{
-padding:18px;border-radius:18px;
+padding:18px;
+border-radius:18px;
 background:linear-gradient(135deg,#10203a,#0b2637);
 border:1px solid #1b4964
 }
+
 .intro h1{font-size:25px;margin:0 0 10px}
 .intro p{color:#b7c8dc;line-height:1.5;margin:0}
-.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+
+.games{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px
+}
+
 .game{
-background:#10192b;border:1px solid #263751;
-border-radius:12px;padding:14px 10px;color:white;
-font-size:15px;font-weight:700;cursor:pointer
+background:#10192b;
+border:1px solid #263751;
+border-radius:12px;
+padding:14px 10px;
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer
 }
+
 .game:active{transform:scale(.98);border-color:#28d9f5}
+
 .chat{
-margin-top:12px;background:#0d1525;
-border:1px solid #23354d;border-radius:16px;
-padding:12px;min-height:240px
+margin-top:12px;
+background:#0d1525;
+border:1px solid #23354d;
+border-radius:16px;
+padding:12px;
+min-height:240px
 }
+
 .messages{
-display:flex;flex-direction:column;gap:12px;
-max-height:390px;overflow-y:auto
+display:flex;
+flex-direction:column;
+gap:12px;
+max-height:390px;
+overflow-y:auto
 }
+
 .msg{
-padding:12px 14px;border-radius:14px;
-white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;
+padding:12px 14px;
+border-radius:14px;
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+line-height:1.5;
 font-size:14px
 }
+
 .bot{background:#17243a;align-self:flex-start;max-width:95%}
 .user{background:#075b75;align-self:flex-end;max-width:95%}
+
+.welcome{
+display:flex;
+align-items:flex-start;
+gap:10px
+}
+
+.mascotte{
+width:60px;
+height:60px;
+object-fit:contain;
+flex-shrink:0;
+border-radius:10px
+}
+
+.bot-name{
+font-weight:800;
+color:#28d9f5;
+margin-bottom:6px
+}
+
 form{display:flex;gap:8px;margin-top:14px}
+
 input{
-min-width:0;flex:1;padding:13px;border-radius:12px;
-border:1px solid #31445e;background:#080f1d;color:white;
+min-width:0;
+flex:1;
+padding:13px;
+border-radius:12px;
+border:1px solid #31445e;
+background:#080f1d;
+color:white;
 font-size:16px
 }
+
 button{
-border:0;border-radius:12px;background:#20c7e7;
-color:#04111b;font-weight:800;padding:12px 15px;
-font-size:14px;cursor:pointer
+border:0;
+border-radius:12px;
+background:#20c7e7;
+color:#04111b;
+font-weight:800;
+padding:12px 15px;
+font-size:14px;
+cursor:pointer
 }
+
 button:disabled,input:disabled{opacity:.65}
+
 .secondary{
-background:#17243a;color:#d9e8fa;
+background:#17243a;
+color:#d9e8fa;
 border:1px solid #30435d
 }
+
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .actions button{flex:1}
 .small{font-size:12px;color:#8499b5;line-height:1.5}
 footer{text-align:center;padding:24px 14px;color:#8499b5;font-size:12px}
+
 @media(min-width:600px){
 .games{grid-template-columns:repeat(3,minmax(0,1fr))}
 .intro h1{font-size:32px}
 }
 </style>
 </head>
+
 <body>
 <header>
   <div class="logo">GAMEBOT <span>AZ</span> 🤖</div>
@@ -93,6 +168,7 @@ footer{text-align:center;padding:24px 14px;color:#8499b5;font-size:12px}
   </section>
 
   <h2>🎮 Choisis ton jeu</h2>
+
   <div class="games">
     <button class="game" type="button" data-q="Donne-moi des conseils pour Roblox">🟦 Roblox</button>
     <button class="game" type="button" data-q="Comment progresser sur Brawl Stars ?">⭐ Brawl Stars</button>
@@ -103,36 +179,64 @@ footer{text-align:center;padding:24px 14px;color:#8499b5;font-size:12px}
   </div>
 
   <h2>💬 Discute avec GameBot AZ</h2>
+
   <section class="chat">
     <div id="chat" class="messages" aria-live="polite">
-      <div class="msg bot">Salut ! 👋 Je suis GameBot AZ.
 
-Je peux t'aider avec Roblox, Brawl Stars, Fortnite, Minecraft et d'autres jeux.
+      <div class="msg bot welcome">
+        <img
+          src="./mascotte.png"
+          alt="Mascotte AZerty"
+          class="mascotte"
+          onerror="this.style.display='none'"
+        >
+        <div>
+          <div class="bot-name">GameBot AZ</div>
+          <div>Bonjour ! Je suis AZerty 👋
 
-Écris ta question ci-dessous pour commencer !</div>
+Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮
+
+Choisis un jeu ou pose-moi directement ta question !</div>
+        </div>
+      </div>
+
     </div>
+
     <form id="form">
-      <input id="question" type="text" placeholder="Pose ta question gaming..." autocomplete="off" required maxlength="1000">
+      <input
+        id="question"
+        type="text"
+        placeholder="Pose ta question gaming..."
+        autocomplete="off"
+        required
+        maxlength="1000"
+      >
       <button id="send" type="submit">Envoyer ➤</button>
     </form>
+
     <div class="actions">
       <button class="secondary" id="clear" type="button">Effacer la discussion</button>
     </div>
   </section>
 
   <h2>💡 Exemples de questions</h2>
+
   <div class="games">
     <button class="game" type="button" data-q="Comment réduire les lags sur mobile ?">📱 Réduire les lags</button>
     <button class="game" type="button" data-q="Comment protéger mon compte gaming ?">🔐 Protéger mon compte</button>
     <button class="game" type="button" data-q="Comment progresser plus vite sur Roblox ?">🚀 Progresser</button>
   </div>
-  <p class="small">GameBot AZ utilise une IA pour générer ses réponses. Elle peut parfois se tromper et ne vérifie pas automatiquement les dernières mises à jour des jeux. Ne partage jamais ton mot de passe ni tes codes de vérification.</p>
+
+  <p class="small">
+    GameBot AZ utilise une IA pour générer ses réponses. Elle peut parfois se tromper et ne vérifie pas automatiquement les dernières mises à jour des jeux. Ne partage jamais ton mot de passe ni tes codes de vérification.
+  </p>
 </main>
 
 <footer>GameBot AZ · Assistant gaming</footer>
 
 <script>
 const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
+
 const chat = document.getElementById("chat");
 const input = document.getElementById("question");
 const form = document.getElementById("form");
@@ -148,8 +252,7 @@ const supportedGames = [
   "Rocket League"
 ];
 
-// Repère le jeu mentionné dans la question.
-// Le jeu écrit explicitement par l'utilisateur est prioritaire.
+// Détecte le jeu réellement cité dans la question.
 function detectGame(text) {
   const normalized = text.toLocaleLowerCase("fr");
 
@@ -158,7 +261,7 @@ function detectGame(text) {
   ) || "";
 }
 
-function say(text, who) {
+function addMessage(text, who) {
   const div = document.createElement("div");
   div.className = "msg " + who;
   div.textContent = text;
@@ -167,34 +270,67 @@ function say(text, who) {
   return div;
 }
 
+function showThinking() {
+  const div = document.createElement("div");
+  div.className = "msg bot welcome";
+
+  const img = document.createElement("img");
+  img.src = "./mascotte.png";
+  img.alt = "Mascotte AZerty";
+  img.className = "mascotte";
+  img.onerror = function() {
+    this.style.display = "none";
+  };
+
+  const content = document.createElement("div");
+
+  const name = document.createElement("div");
+  name.className = "bot-name";
+  name.textContent = "GameBot AZ";
+
+  const message = document.createElement("div");
+  message.textContent = "Je réfléchis à ta question... 🤖";
+
+  content.appendChild(name);
+  content.appendChild(message);
+  div.appendChild(img);
+  div.appendChild(content);
+
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+
+  return div;
+}
+
 async function ask(question) {
   const originalQuestion = question.trim();
+
   if (!originalQuestion || input.disabled) return;
 
-  // Détecte le jeu dans la question elle-même.
-  // On ne force jamais le jeu préféré du profil.
+  // Si la question nomme Roblox, Roblox est prioritaire,
+  // même si le joueur a choisi Brawl Stars auparavant.
   const game = detectGame(originalQuestion);
 
   const finalQuestion = game
     ? "Le jeu concerné par cette question est " + game +
-      ". Réponds uniquement en tenant compte de ce jeu, sauf si je demande explicitement une comparaison. Ma question : " +
+      ". Réponds en tenant compte de ce jeu. " +
+      "Ne remplace pas ce jeu par un autre. Question : " +
       originalQuestion
     : originalQuestion;
 
-  say(originalQuestion, "user");
+  addMessage(originalQuestion, "user");
 
   input.value = "";
   input.disabled = true;
   sendButton.disabled = true;
 
-  const loading = say("🤖 GameBot AZ réfléchit...", "bot");
+  const loading = showThinking();
 
   history.push({
     role: "user",
     content: finalQuestion
   });
 
-  // Garde un historique récent de la conversation.
   history = history.slice(-12);
 
   try {
@@ -220,7 +356,8 @@ async function ask(question) {
 
     const answer = data.answer || "Je n'ai pas reçu de réponse.";
 
-    loading.textContent = answer;
+    loading.remove();
+    addMessage(answer, "bot");
 
     history.push({
       role: "assistant",
@@ -231,11 +368,18 @@ async function ask(question) {
 
   } catch (error) {
     console.error("GameBot AZ :", error);
-    loading.textContent =
-      "Oups ! Impossible de joindre l'IA pour le moment. Vérifie que le Worker est déployé et réessaie.";
 
-    // Retire la question qui a échoué de l'historique.
-    history.pop();
+    loading.remove();
+
+    addMessage(
+      "Oups ! Impossible de joindre l'IA pour le moment. Vérifie que le Worker est déployé et réessaie.",
+      "bot"
+    );
+
+    // En cas d'erreur, retire la question qui a échoué.
+    if (history.length && history[history.length - 1].role === "user") {
+      history.pop();
+    }
 
   } finally {
     input.disabled = false;
@@ -260,10 +404,34 @@ document.getElementById("clear").addEventListener("click", function() {
   history = [];
   chat.replaceChildren();
 
-  say(
-    "Discussion effacée ! 👋 Je suis prêt pour une nouvelle conversation.",
-    "bot"
-  );
+  const welcome = document.createElement("div");
+  welcome.className = "msg bot welcome";
+
+  const img = document.createElement("img");
+  img.src = "./mascotte.png";
+  img.alt = "Mascotte AZerty";
+  img.className = "mascotte";
+  img.onerror = function() {
+    this.style.display = "none";
+  };
+
+  const content = document.createElement("div");
+
+  const name = document.createElement("div");
+  name.className = "bot-name";
+  name.textContent = "GameBot AZ";
+
+  const message = document.createElement("div");
+  message.textContent =
+    "Bonjour ! Je suis AZerty 👋\n\n" +
+    "Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮\n\n" +
+    "Choisis un jeu ou pose-moi directement ta question !";
+
+  content.appendChild(name);
+  content.appendChild(message);
+  welcome.appendChild(img);
+  welcome.appendChild(content);
+  chat.appendChild(welcome);
 });
 </script>
 </body>
