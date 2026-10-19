@@ -2,437 +2,486 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GameBot AZ - Assistant Gaming</title>
-<meta name="theme-color" content="#080d1b">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <title>GameBot AZ - AZerty</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: #101e31;
+      --panel2: #14263c;
+      --cyan: #28d9f5;
+      --text: #f3f7fc;
+      --muted: #a8b7c9;
+      --border: #263b53;
+    }
 
-<style>
-*{box-sizing:border-box}
-:root{color-scheme:dark}
+    * { box-sizing: border-box; }
 
-body{
-margin:0;
-background:#080d1b;
-color:#edf4ff;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-min-height:100vh
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-header{
-padding:20px 16px;
-text-align:center;
-background:linear-gradient(135deg,#101c37,#092d42);
-border-bottom:1px solid #173a55
-}
+    button, textarea { font: inherit; }
 
-.logo{font-size:30px;font-weight:900;letter-spacing:1px}
-.logo span{color:#28d9f5}
-header p{color:#9bb1ca;margin:8px 0 0;font-size:14px}
+    .container {
+      width: min(900px, 100%);
+      margin: auto;
+      padding: 22px 16px;
+    }
 
-main{max-width:760px;margin:auto;padding:18px 14px}
-h2{font-size:19px;margin:22px 0 12px}
+    header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 24px;
+    }
 
-.intro{
-padding:18px;
-border-radius:18px;
-background:linear-gradient(135deg,#10203a,#0b2637);
-border:1px solid #1b4964
-}
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      font-size: 27px;
+      flex-shrink: 0;
+    }
 
-.intro h1{font-size:25px;margin:0 0 10px}
-.intro p{color:#b7c8dc;line-height:1.5;margin:0}
+    h1 {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: .3px;
+    }
 
-.games{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:10px
-}
+    h1 span { color: var(--cyan); }
 
-.game{
-background:#10192b;
-border:1px solid #263751;
-border-radius:12px;
-padding:14px 10px;
-color:white;
-font-size:15px;
-font-weight:700;
-cursor:pointer
-}
+    .subtitle {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-.game:active{transform:scale(.98);border-color:#28d9f5}
+    .intro {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: linear-gradient(135deg, #10243a, #0c1828);
+      margin-bottom: 18px;
+    }
 
-.chat{
-margin-top:12px;
-background:#0d1525;
-border:1px solid #23354d;
-border-radius:16px;
-padding:12px;
-min-height:240px
-}
+    .intro h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
 
-.messages{
-display:flex;
-flex-direction:column;
-gap:12px;
-max-height:390px;
-overflow-y:auto
-}
+    .intro p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
 
-.msg{
-padding:12px 14px;
-border-radius:14px;
-white-space:pre-wrap;
-overflow-wrap:anywhere;
-line-height:1.5;
-font-size:14px
-}
+    .section-title {
+      font-size: 16px;
+      margin: 24px 0 12px;
+    }
 
-.bot{background:#17243a;align-self:flex-start;max-width:95%}
-.user{background:#075b75;align-self:flex-end;max-width:95%}
+    .games {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: 20px;
+    }
 
-.welcome{
-display:flex;
-align-items:flex-start;
-gap:10px
-}
+    .game {
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: .15s;
+    }
 
-.mascotte{
-width:60px;
-height:60px;
-object-fit:contain;
-flex-shrink:0;
-border-radius:10px
-}
+    .game:hover, .game.active {
+      border-color: var(--cyan);
+      background: #123044;
+    }
 
-.bot-name{
-font-weight:800;
-color:#28d9f5;
-margin-bottom:6px
-}
+    .chat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+    }
 
-form{display:flex;gap:8px;margin-top:14px}
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 15px;
+      border-bottom: 1px solid var(--border);
+    }
 
-input{
-min-width:0;
-flex:1;
-padding:13px;
-border-radius:12px;
-border:1px solid #31445e;
-background:#080f1d;
-color:white;
-font-size:16px
-}
+    .chat-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-weight: 700;
+    }
 
-button{
-border:0;
-border-radius:12px;
-background:#20c7e7;
-color:#04111b;
-font-weight:800;
-padding:12px 15px;
-font-size:14px;
-cursor:pointer
-}
+    .status {
+      color: #77edb1;
+      font-size: 12px;
+      margin-top: 4px;
+      font-weight: 400;
+    }
 
-button:disabled,input:disabled{opacity:.65}
+    .small-button {
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 12px;
+    }
 
-.secondary{
-background:#17243a;
-color:#d9e8fa;
-border:1px solid #30435d
-}
+    .messages {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 230px;
+      max-height: 440px;
+      overflow-y: auto;
+      padding: 17px;
+    }
 
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.actions button{flex:1}
-.small{font-size:12px;color:#8499b5;line-height:1.5}
-footer{text-align:center;padding:24px 14px;color:#8499b5;font-size:12px}
+    .msg {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
 
-@media(min-width:600px){
-.games{grid-template-columns:repeat(3,minmax(0,1fr))}
-.intro h1{font-size:32px}
-}
-</style>
+    .msg.user {
+      align-self: flex-end;
+      max-width: 88%;
+      background: #15334a;
+      border: 1px solid #24506b;
+      border-radius: 15px 15px 4px 15px;
+      padding: 11px 13px;
+      white-space: pre-wrap;
+    }
+
+    .msg.bot {
+      white-space: pre-wrap;
+    }
+
+    .mascot {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      flex-shrink: 0;
+      border-radius: 12px;
+    }
+
+    .thinking .mascot {
+      animation: bounce .65s ease-in-out infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0) rotate(-4deg); }
+      to { transform: translateY(-5px) rotate(4deg); }
+    }
+
+    .bot-text {
+      padding: 10px 12px;
+      border-radius: 4px 14px 14px 14px;
+      background: var(--panel2);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .composer {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      padding: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 46px;
+      max-height: 130px;
+      flex: 1;
+      min-width: 0;
+      color: var(--text);
+      background: #081525;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px;
+      outline: none;
+    }
+
+    textarea:focus { border-color: var(--cyan); }
+
+    .send {
+      min-height: 46px;
+      padding: 0 17px;
+      color: #03121d;
+      background: var(--cyan);
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .send:disabled { opacity: .5; cursor: wait; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      padding: 0 15px 15px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 22px 0 8px;
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 16px 11px; }
+      .intro { padding: 17px; }
+      .intro h2 { font-size: 20px; }
+      h1 { font-size: 22px; }
+      .game { padding: 10px 11px; font-size: 13px; }
+      .messages { padding: 12px; }
+      .composer { padding: 10px; }
+      .send { padding: 0 13px; }
+    }
+  </style>
 </head>
-
 <body>
-<header>
-  <div class="logo">GAMEBOT <span>AZ</span> 🤖</div>
-  <p>Ton assistant gaming, gratuitement.</p>
-</header>
+  <main class="container">
+    <header>
+      <div class="logo">🤖</div>
+      <div>
+        <h1>GAMEBOT <span>AZ</span></h1>
+        <p class="subtitle">Ton assistant gaming, avec AZerty !</p>
+      </div>
+    </header>
 
-<main>
-  <section class="intro">
-    <h1>Le gaming, plus facile. 🎮</h1>
-    <p>Pose tes questions, découvre des astuces et progresse sur tes jeux préférés. Choisis un jeu ou écris directement ta question.</p>
-  </section>
+    <section class="intro">
+      <h2>🎮 Progresse dans tes jeux préférés</h2>
+      <p>
+        Besoin d'aide sur un jeu ? Pose ta question à AZerty :
+        astuces, explications, stratégies et conseils pour progresser.
+      </p>
+    </section>
 
-  <h2>🎮 Choisis ton jeu</h2>
+    <h2 class="section-title">Choisis ton jeu</h2>
+    <div class="games">
+      <button class="game" type="button" data-game="Roblox">🎲 Roblox</button>
+      <button class="game" type="button" data-game="Brawl Stars">⭐ Brawl Stars</button>
+      <button class="game" type="button" data-game="Fortnite">🎯 Fortnite</button>
+      <button class="game" type="button" data-game="Minecraft">⛏️ Minecraft</button>
+      <button class="game" type="button" data-game="Rocket League">🚗 Rocket League</button>
+    </div>
 
-  <div class="games">
-    <button class="game" type="button" data-q="Donne-moi des conseils pour Roblox">🟦 Roblox</button>
-    <button class="game" type="button" data-q="Comment progresser sur Brawl Stars ?">⭐ Brawl Stars</button>
-    <button class="game" type="button" data-q="Donne-moi des conseils pour Fortnite">🔫 Fortnite</button>
-    <button class="game" type="button" data-q="Comment bien débuter Minecraft ?">⛏️ Minecraft</button>
-    <button class="game" type="button" data-q="Donne-moi des conseils pour Rocket League">🚗 Rocket League</button>
-    <button class="game" type="button" data-q="Donne-moi des conseils gaming généraux">🎯 Autres jeux</button>
-  </div>
+    <section class="chat">
+      <div class="chat-header">
+        <div class="chat-title">
+          <span>
+            💬 Discussion avec AZerty
+            <div class="status">● Assistant prêt à t'aider</div>
+          </span>
+        </div>
+        <button class="small-button" id="clear" type="button">Effacer</button>
+      </div>
 
-  <h2>💬 Discute avec GameBot AZ</h2>
-
-  <section class="chat">
-    <div id="chat" class="messages" aria-live="polite">
-
-      <div class="msg bot welcome">
-        <img
-          src="./mascotte.png"
-          alt="Mascotte AZerty"
-          class="mascotte"
-          onerror="this.style.display='none'"
-        >
-        <div>
-          <div class="bot-name">GameBot AZ</div>
-          <div>Bonjour ! Je suis AZerty 👋
-
-Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮
-
-Choisis un jeu ou pose-moi directement ta question !</div>
+      <div class="messages" id="messages" aria-live="polite">
+        <div class="msg bot">
+          <img class="mascot" src="./mascotte.png" alt="AZerty"
+               onerror="this.style.display='none'">
+          <div class="bot-text">
+            Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮
+          </div>
         </div>
       </div>
 
-    </div>
+      <form class="composer" id="form">
+        <textarea id="question" maxlength="1500"
+          placeholder="Pose ta question à AZerty..." required></textarea>
+        <button class="send" id="send" type="submit">Envoyer</button>
+      </form>
+      <div class="hint">
+        AZerty peut se tromper : vérifie les informations importantes.
+        La discussion est conservée uniquement dans cette page ouverte.
+      </div>
+    </section>
 
-    <form id="form">
-      <input
-        id="question"
-        type="text"
-        placeholder="Pose ta question gaming..."
-        autocomplete="off"
-        required
-        maxlength="1000"
-      >
-      <button id="send" type="submit">Envoyer ➤</button>
-    </form>
+    <footer>GameBot AZ · Apprends, joue et progresse avec AZerty 🎮</footer>
+  </main>
 
-    <div class="actions">
-      <button class="secondary" id="clear" type="button">Effacer la discussion</button>
-    </div>
-  </section>
+  <script>
+    const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
 
-  <h2>💡 Exemples de questions</h2>
+    const messagesEl = document.getElementById("messages");
+    const form = document.getElementById("form");
+    const input = document.getElementById("question");
+    const sendButton = document.getElementById("send");
+    const clearButton = document.getElementById("clear");
+    const gameButtons = document.querySelectorAll(".game");
 
-  <div class="games">
-    <button class="game" type="button" data-q="Comment réduire les lags sur mobile ?">📱 Réduire les lags</button>
-    <button class="game" type="button" data-q="Comment protéger mon compte gaming ?">🔐 Protéger mon compte</button>
-    <button class="game" type="button" data-q="Comment progresser plus vite sur Roblox ?">🚀 Progresser</button>
-  </div>
+    // Historique temporaire : il disparaît si la page est rechargée.
+    let history = [];
+    let selectedGame = "";
 
-  <p class="small">
-    GameBot AZ utilise une IA pour générer ses réponses. Elle peut parfois se tromper et ne vérifie pas automatiquement les dernières mises à jour des jeux. Ne partage jamais ton mot de passe ni tes codes de vérification.
-  </p>
-</main>
+    function scrollToBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
 
-<footer>GameBot AZ · Assistant gaming</footer>
+    function addMessage(role, content, options = {}) {
+      const row = document.createElement("div");
+      row.className = "msg " + (role === "user" ? "user" : "bot");
 
-<script>
-const API_URL = "https://gamebot-az-api.pokebrocant.workers.dev/";
+      if (role === "assistant") {
+        if (options.thinking) row.classList.add("thinking");
 
-const chat = document.getElementById("chat");
-const input = document.getElementById("question");
-const form = document.getElementById("form");
-const sendButton = document.getElementById("send");
+        const mascot = document.createElement("img");
+        mascot.className = "mascot";
+        mascot.src = "./mascotte.png";
+        mascot.alt = "AZerty";
+        mascot.onerror = () => { mascot.style.display = "none"; };
 
-let history = [];
+        const text = document.createElement("div");
+        text.className = "bot-text";
+        text.textContent = content;
 
-const supportedGames = [
-  "Brawl Stars",
-  "Roblox",
-  "Fortnite",
-  "Minecraft",
-  "Rocket League"
-];
+        row.append(mascot, text);
+      } else {
+        row.textContent = content;
+      }
 
-// Détecte le jeu réellement cité dans la question.
-function detectGame(text) {
-  const normalized = text.toLocaleLowerCase("fr");
+      messagesEl.appendChild(row);
+      scrollToBottom();
+      return row;
+    }
 
-  return supportedGames.find(game =>
-    normalized.includes(game.toLocaleLowerCase("fr"))
-  ) || "";
-}
-
-function addMessage(text, who) {
-  const div = document.createElement("div");
-  div.className = "msg " + who;
-  div.textContent = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  return div;
-}
-
-function showThinking() {
-  const div = document.createElement("div");
-  div.className = "msg bot welcome";
-
-  const img = document.createElement("img");
-  img.src = "./mascotte.png";
-  img.alt = "Mascotte AZerty";
-  img.className = "mascotte";
-  img.onerror = function() {
-    this.style.display = "none";
-  };
-
-  const content = document.createElement("div");
-
-  const name = document.createElement("div");
-  name.className = "bot-name";
-  name.textContent = "GameBot AZ";
-
-  const message = document.createElement("div");
-  message.textContent = "Je réfléchis à ta question... 🤖";
-
-  content.appendChild(name);
-  content.appendChild(message);
-  div.appendChild(img);
-  div.appendChild(content);
-
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-
-  return div;
-}
-
-async function ask(question) {
-  const originalQuestion = question.trim();
-
-  if (!originalQuestion || input.disabled) return;
-
-  // Si la question nomme Roblox, Roblox est prioritaire,
-  // même si le joueur a choisi Brawl Stars auparavant.
-  const game = detectGame(originalQuestion);
-
-  const finalQuestion = game
-    ? "Le jeu concerné par cette question est " + game +
-      ". Réponds en tenant compte de ce jeu. " +
-      "Ne remplace pas ce jeu par un autre. Question : " +
-      originalQuestion
-    : originalQuestion;
-
-  addMessage(originalQuestion, "user");
-
-  input.value = "";
-  input.disabled = true;
-  sendButton.disabled = true;
-
-  const loading = showThinking();
-
-  history.push({
-    role: "user",
-    content: finalQuestion
-  });
-
-  history = history.slice(-12);
-
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: history })
+    gameButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        selectedGame = button.dataset.game;
+        gameButtons.forEach(b => b.classList.toggle("active", b === button));
+        input.value = "Aide-moi à progresser sur " + selectedGame + ".";
+        input.focus();
+      });
     });
 
-    let data;
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
 
-    try {
-      data = await response.json();
-    } catch {
-      throw new Error("Le serveur a renvoyé une réponse invalide.");
-    }
+      const typedQuestion = input.value.trim();
+      if (!typedQuestion || sendButton.disabled) return;
 
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Erreur du serveur (" + response.status + ")."
-      );
-    }
+      const question = selectedGame && !typedQuestion.toLowerCase().includes(selectedGame.toLowerCase())
+        ? "Mon jeu est " + selectedGame + ". " + typedQuestion
+        : typedQuestion;
 
-    const answer = data.answer || "Je n'ai pas reçu de réponse.";
+      addMessage("user", typedQuestion);
+      input.value = "";
+      sendButton.disabled = true;
+      sendButton.textContent = "...";
 
-    loading.remove();
-    addMessage(answer, "bot");
+      const thinkingRow = addMessage("assistant", "AZerty réfléchit...", { thinking: true });
 
-    history.push({
-      role: "assistant",
-      content: answer
+      // Envoyer les derniers messages pour garder le contexte.
+      const messagesToSend = [
+        ...history,
+        { role: "user", content: question }
+      ].slice(-12);
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question,
+            messages: messagesToSend
+          })
+        });
+
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Le serveur a renvoyé une réponse illisible.");
+        }
+
+        if (!response.ok) {
+          throw new Error(data.error || "Le serveur a rencontré un problème.");
+        }
+
+        const answer = typeof data.answer === "string"
+          ? data.answer
+          : "Je n'ai pas réussi à générer une réponse.";
+
+        thinkingRow.remove();
+        addMessage("assistant", answer);
+
+        history = [
+          ...messagesToSend,
+          { role: "assistant", content: answer }
+        ].slice(-12);
+      } catch (error) {
+        thinkingRow.remove();
+        addMessage(
+          "assistant",
+          "Oups ! Je n'arrive pas à contacter le serveur. Vérifie ta connexion et réessaie. Si le problème continue, vérifie le déploiement Cloudflare."
+        );
+        console.error("Erreur GameBot AZ :", error);
+      } finally {
+        sendButton.disabled = false;
+        sendButton.textContent = "Envoyer";
+        input.focus();
+      }
     });
 
-    history = history.slice(-12);
+    clearButton.addEventListener("click", () => {
+      history = [];
+      selectedGame = "";
+      gameButtons.forEach(button => button.classList.remove("active"));
+      messagesEl.replaceChildren();
 
-  } catch (error) {
-    console.error("GameBot AZ :", error);
+      const row = document.createElement("div");
+      row.className = "msg bot";
 
-    loading.remove();
+      const mascot = document.createElement("img");
+      mascot.className = "mascot";
+      mascot.src = "./mascotte.png";
+      mascot.alt = "AZerty";
+      mascot.onerror = () => { mascot.style.display = "none"; };
 
-    addMessage(
-      "Oups ! Impossible de joindre l'IA pour le moment. Vérifie que le Worker est déployé et réessaie.",
-      "bot"
-    );
+      const text = document.createElement("div");
+      text.className = "bot-text";
+      text.textContent = "Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
 
-    // En cas d'erreur, retire la question qui a échoué.
-    if (history.length && history[history.length - 1].role === "user") {
-      history.pop();
-    }
-
-  } finally {
-    input.disabled = false;
-    sendButton.disabled = false;
-    input.focus();
-    chat.scrollTop = chat.scrollHeight;
-  }
-}
-
-form.addEventListener("submit", function(event) {
-  event.preventDefault();
-  ask(input.value);
-});
-
-document.querySelectorAll("[data-q]").forEach(function(button) {
-  button.addEventListener("click", function() {
-    ask(button.dataset.q);
-  });
-});
-
-document.getElementById("clear").addEventListener("click", function() {
-  history = [];
-  chat.replaceChildren();
-
-  const welcome = document.createElement("div");
-  welcome.className = "msg bot welcome";
-
-  const img = document.createElement("img");
-  img.src = "./mascotte.png";
-  img.alt = "Mascotte AZerty";
-  img.className = "mascotte";
-  img.onerror = function() {
-    this.style.display = "none";
-  };
-
-  const content = document.createElement("div");
-
-  const name = document.createElement("div");
-  name.className = "bot-name";
-  name.textContent = "GameBot AZ";
-
-  const message = document.createElement("div");
-  message.textContent =
-    "Bonjour ! Je suis AZerty 👋\n\n" +
-    "Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮\n\n" +
-    "Choisis un jeu ou pose-moi directement ta question !";
-
-  content.appendChild(name);
-  content.appendChild(message);
-  welcome.appendChild(img);
-  welcome.appendChild(content);
-  chat.appendChild(welcome);
-});
-</script>
+      row.append(mascot, text);
+      messagesEl.appendChild(row);
+      input.value = "";
+    });
+  </script>
 </body>
 </html>
