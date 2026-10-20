@@ -11,6 +11,10 @@
       --panel: #101e31;
       --panel2: #14263c;
       --cyan: #28d9f5;
+      --accent-soft: #123044;
+      --accent-user: #15334a;
+      --accent-user-border: #24506b;
+      --accent-contrast: #03121d;
       --text: #f3f7fc;
       --muted: #a8b7c9;
       --border: #263b53;
@@ -61,6 +65,11 @@
       display: block;
     }
 
+    .brand {
+      flex: 1;
+      min-width: 0;
+    }
+
     h1 {
       margin: 0;
       font-size: 25px;
@@ -73,6 +82,82 @@
       margin: 5px 0 0;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    /* Sélecteur de couleurs */
+    .theme-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle {
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--cyan);
+    }
+
+    .theme-menu {
+      position: absolute;
+      top: calc(100% + 9px);
+      right: 0;
+      z-index: 10;
+      width: 260px;
+      padding: 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      box-shadow: 0 12px 35px #0007;
+    }
+
+    .theme-menu[hidden] { display: none; }
+
+    .theme-heading {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 11px;
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .theme-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+      padding: 7px 2px;
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    .theme-option[aria-pressed="true"] {
+      border: 2px solid var(--cyan);
+      padding: 6px 1px;
+    }
+
+    .theme-swatch {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: var(--swatch);
+      border: 2px solid #ffffff50;
     }
 
     .intro {
@@ -118,7 +203,7 @@
 
     .game:hover, .game.active {
       border-color: var(--cyan);
-      background: #123044;
+      background: var(--accent-soft);
     }
 
     .chat {
@@ -182,16 +267,14 @@
     .msg.user {
       align-self: flex-end;
       max-width: 88%;
-      background: #15334a;
-      border: 1px solid #24506b;
+      background: var(--accent-user);
+      border: 1px solid var(--accent-user-border);
       border-radius: 15px 15px 4px 15px;
       padding: 11px 13px;
       white-space: pre-wrap;
     }
 
-    .msg.bot {
-      white-space: pre-wrap;
-    }
+    .msg.bot { white-space: pre-wrap; }
 
     .mascot {
       width: 44px;
@@ -246,7 +329,7 @@
     .send {
       min-height: 46px;
       padding: 0 17px;
-      color: #03121d;
+      color: var(--accent-contrast);
       background: var(--cyan);
       border: 0;
       border-radius: 12px;
@@ -263,7 +346,6 @@
       padding: 0 15px 15px;
     }
 
-    /* Nouveau compteur */
     .char-count {
       color: var(--muted);
       font-size: 11px;
@@ -285,9 +367,14 @@
 
     @media (max-width: 480px) {
       .container { padding: 16px 11px; }
+      header { gap: 9px; flex-wrap: wrap; }
+      .logo { width: 46px; height: 46px; }
+      h1 { font-size: 20px; }
+      .subtitle { font-size: 12px; }
+      .theme-toggle { padding: 9px 10px; font-size: 12px; }
+      .theme-menu { width: min(260px, calc(100vw - 22px)); }
       .intro { padding: 17px; }
       .intro h2 { font-size: 20px; }
-      h1 { font-size: 22px; }
       .game { padding: 10px 11px; font-size: 13px; }
       .messages { padding: 12px; }
       .composer { padding: 10px; }
@@ -303,9 +390,84 @@
              class="logo-img"
              onerror="this.style.display='none'">
       </div>
-      <div>
+
+      <div class="brand">
         <h1>GAMEBOT <span>AZ</span></h1>
         <p class="subtitle">Ton assistant gaming, avec AZerty !</p>
+      </div>
+
+      <div class="theme-wrap">
+        <button class="theme-toggle" id="themeToggle"
+                type="button" aria-expanded="false"
+                aria-controls="themeMenu">
+          🎨 Couleur
+        </button>
+
+        <div class="theme-menu" id="themeMenu" hidden>
+          <p class="theme-heading">Choisis ta couleur</p>
+          <div class="theme-grid" id="themeGrid">
+            <button class="theme-option" type="button" data-theme="cyan"
+                    aria-pressed="true">
+              <span class="theme-swatch" style="--swatch:#28d9f5"></span>
+              Cyan
+            </button>
+            <button class="theme-option" type="button" data-theme="violet"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#a78bfa"></span>
+              Violet
+            </button>
+            <button class="theme-option" type="button" data-theme="rouge"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ff5b69"></span>
+              Rouge
+            </button>
+            <button class="theme-option" type="button" data-theme="vert"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#39e58c"></span>
+              Vert néon
+            </button>
+            <button class="theme-option" type="button" data-theme="bleu"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#3984ff"></span>
+              Bleu
+            </button>
+            <button class="theme-option" type="button" data-theme="rose"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ff72c6"></span>
+              Rose
+            </button>
+            <button class="theme-option" type="button" data-theme="orange"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ff9b42"></span>
+              Orange
+            </button>
+            <button class="theme-option" type="button" data-theme="jaune"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ffe45c"></span>
+              Jaune
+            </button>
+            <button class="theme-option" type="button" data-theme="turquoise"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#32e0c4"></span>
+              Turquoise
+            </button>
+            <button class="theme-option" type="button" data-theme="blanc"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#f3f7fc"></span>
+              Blanc
+            </button>
+            <button class="theme-option" type="button" data-theme="or"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ffc857"></span>
+              Or
+            </button>
+            <button class="theme-option" type="button" data-theme="lime"
+                    aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#b7f34a"></span>
+              Lime
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -380,6 +542,126 @@
     const gameButtons = document.querySelectorAll(".game");
     const charCount = document.getElementById("charCount");
 
+    // Couleurs disponibles
+    const themes = {
+      cyan: {
+        accent: "#28d9f5", soft: "#123044",
+        user: "#15334a", userBorder: "#24506b"
+      },
+      violet: {
+        accent: "#a78bfa", soft: "#30264b",
+        user: "#33264d", userBorder: "#59427f"
+      },
+      rouge: {
+        accent: "#ff5b69", soft: "#49232e",
+        user: "#48232e", userBorder: "#7c3948"
+      },
+      vert: {
+        accent: "#39e58c", soft: "#173c32",
+        user: "#194333", userBorder: "#2b7052"
+      },
+      bleu: {
+        accent: "#3984ff", soft: "#1a3156",
+        user: "#1b3155", userBorder: "#345b91"
+      },
+      rose: {
+        accent: "#ff72c6", soft: "#482541",
+        user: "#492541", userBorder: "#81436f"
+      },
+      orange: {
+        accent: "#ff9b42", soft: "#49311f",
+        user: "#49301e", userBorder: "#80502b"
+      },
+      jaune: {
+        accent: "#ffe45c", soft: "#49401f",
+        user: "#49401f", userBorder: "#80702b"
+      },
+      turquoise: {
+        accent: "#32e0c4", soft: "#173d3b",
+        user: "#19413e", userBorder: "#2b7069"
+      },
+      blanc: {
+        accent: "#f3f7fc", soft: "#303b4a",
+        user: "#303b4a", userBorder: "#58677a"
+      },
+      or: {
+        accent: "#ffc857", soft: "#49391f",
+        user: "#49391f", userBorder: "#80632b"
+      },
+      lime: {
+        accent: "#b7f34a", soft: "#35421f",
+        user: "#35421f", userBorder: "#617c2b"
+      }
+    };
+
+    const themeToggle = document.getElementById("themeToggle");
+    const themeMenu = document.getElementById("themeMenu");
+    const themeOptions = document.querySelectorAll(".theme-option");
+
+    function applyTheme(name, save = true) {
+      const theme = themes[name] || themes.cyan;
+      const root = document.documentElement;
+
+      root.style.setProperty("--cyan", theme.accent);
+      root.style.setProperty("--accent-soft", theme.soft);
+      root.style.setProperty("--accent-user", theme.user);
+      root.style.setProperty("--accent-user-border", theme.userBorder);
+
+      // Contraste du texte sur le bouton Envoyer
+      const lightAccent = ["#28d9f5", "#39e58c", "#32e0c4",
+        "#f3f7fc", "#b7f34a", "#ffe45c", "#ffc857",
+        "#ff9b42", "#ff72c6"].includes(theme.accent);
+
+      root.style.setProperty(
+        "--accent-contrast",
+        lightAccent ? "#03121d" : "#ffffff"
+      );
+
+      themeOptions.forEach(option => {
+        option.setAttribute(
+          "aria-pressed",
+          String(option.dataset.theme === name)
+        );
+      });
+
+      if (save) {
+        try {
+          localStorage.setItem("gamebot-az-theme", name);
+        } catch (error) {
+          console.warn("Sauvegarde du thème indisponible.");
+        }
+      }
+    }
+
+    // Recharge la dernière couleur choisie
+    try {
+      const savedTheme = localStorage.getItem("gamebot-az-theme");
+      applyTheme(themes[savedTheme] ? savedTheme : "cyan", false);
+    } catch (error) {
+      applyTheme("cyan", false);
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const opening = themeMenu.hidden;
+      themeMenu.hidden = !opening;
+      themeToggle.setAttribute("aria-expanded", String(opening));
+    });
+
+    themeOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        applyTheme(option.dataset.theme);
+        themeMenu.hidden = true;
+        themeToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".theme-wrap")) {
+        themeMenu.hidden = true;
+        themeToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+
     // Compteur de caractères
     function updateCharCount() {
       charCount.textContent = input.value.length + "/1500 caractères";
@@ -388,7 +670,7 @@
     input.addEventListener("input", updateCharCount);
     updateCharCount();
 
-    // Historique temporaire : il disparaît si la page est rechargée.
+    // Historique temporaire du chat
     let history = [];
     let selectedGame = "";
 
@@ -426,7 +708,9 @@
     gameButtons.forEach(button => {
       button.addEventListener("click", () => {
         selectedGame = button.dataset.game;
-        gameButtons.forEach(b => b.classList.toggle("active", b === button));
+        gameButtons.forEach(b =>
+          b.classList.toggle("active", b === button)
+        );
         input.value = "Aide-moi à progresser sur " + selectedGame + ".";
         updateCharCount();
         input.focus();
@@ -439,7 +723,8 @@
       const typedQuestion = input.value.trim();
       if (!typedQuestion || sendButton.disabled) return;
 
-      const question = selectedGame && !typedQuestion.toLowerCase().includes(selectedGame.toLowerCase())
+      const question = selectedGame &&
+        !typedQuestion.toLowerCase().includes(selectedGame.toLowerCase())
         ? "Mon jeu est " + selectedGame + ". " + typedQuestion
         : typedQuestion;
 
@@ -449,7 +734,11 @@
       sendButton.disabled = true;
       sendButton.textContent = "...";
 
-      const thinkingRow = addMessage("assistant", "AZerty réfléchit...", { thinking: true });
+      const thinkingRow = addMessage(
+        "assistant",
+        "AZerty réfléchit...",
+        { thinking: true }
+      );
 
       const messagesToSend = [
         ...history,
@@ -474,7 +763,9 @@
         }
 
         if (!response.ok) {
-          throw new Error(data.error || "Le serveur a rencontré un problème.");
+          throw new Error(
+            data.error || "Le serveur a rencontré un problème."
+          );
         }
 
         const answer = typeof data.answer === "string"
@@ -519,7 +810,8 @@
 
       const text = document.createElement("div");
       text.className = "bot-text";
-      text.textContent = "Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
+      text.textContent =
+        "Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
 
       row.append(mascot, text);
       messagesEl.appendChild(row);
