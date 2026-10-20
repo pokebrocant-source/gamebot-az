@@ -53,7 +53,6 @@
       overflow: hidden;
     }
 
-    /* Nouveau logo GameBot AZ */
     .logo-img {
       width: 100%;
       height: 100%;
@@ -202,7 +201,7 @@
       border-radius: 12px;
     }
 
-    /* Animation conservée */
+    /* Animation originale conservée */
     .thinking .mascot {
       animation: bounce .65s ease-in-out infinite alternate;
     }
@@ -264,11 +263,24 @@
       padding: 0 15px 15px;
     }
 
+    /* Nouveau compteur */
+    .char-count {
+      color: var(--muted);
+      font-size: 11px;
+      text-align: right;
+      padding: 0 15px 10px;
+    }
+
     footer {
       text-align: center;
       color: var(--muted);
       font-size: 12px;
       padding: 22px 0 8px;
+    }
+
+    .version {
+      margin-top: 6px;
+      opacity: .7;
     }
 
     @media (max-width: 480px) {
@@ -286,7 +298,6 @@
 <body>
   <main class="container">
     <header>
-      <!-- Nouveau logo à la place du robot -->
       <div class="logo">
         <img src="./logo-gamebot.png" alt="Logo GameBot AZ"
              class="logo-img"
@@ -341,13 +352,21 @@
           placeholder="Pose ta question à AZerty..." required></textarea>
         <button class="send" id="send" type="submit">Envoyer</button>
       </form>
+
+      <div id="charCount" class="char-count" aria-live="polite">
+        0/1500 caractères
+      </div>
+
       <div class="hint">
         AZerty peut se tromper : vérifie les informations importantes.
         La discussion est conservée uniquement dans cette page ouverte.
       </div>
     </section>
 
-    <footer>GameBot AZ · Apprends, joue et progresse avec AZerty 🎮</footer>
+    <footer>
+      GameBot AZ · Apprends, joue et progresse avec AZerty 🎮
+      <div class="version">Version 1.1</div>
+    </footer>
   </main>
 
   <script>
@@ -359,6 +378,15 @@
     const sendButton = document.getElementById("send");
     const clearButton = document.getElementById("clear");
     const gameButtons = document.querySelectorAll(".game");
+    const charCount = document.getElementById("charCount");
+
+    // Compteur de caractères
+    function updateCharCount() {
+      charCount.textContent = input.value.length + "/1500 caractères";
+    }
+
+    input.addEventListener("input", updateCharCount);
+    updateCharCount();
 
     // Historique temporaire : il disparaît si la page est rechargée.
     let history = [];
@@ -400,6 +428,7 @@
         selectedGame = button.dataset.game;
         gameButtons.forEach(b => b.classList.toggle("active", b === button));
         input.value = "Aide-moi à progresser sur " + selectedGame + ".";
+        updateCharCount();
         input.focus();
       });
     });
@@ -416,6 +445,7 @@
 
       addMessage("user", typedQuestion);
       input.value = "";
+      updateCharCount();
       sendButton.disabled = true;
       sendButton.textContent = "...";
 
@@ -494,6 +524,7 @@
       row.append(mascot, text);
       messagesEl.appendChild(row);
       input.value = "";
+      updateCharCount();
     });
   </script>
 </body>
