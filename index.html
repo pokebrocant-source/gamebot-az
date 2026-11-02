@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07111f">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./logo-gamebot.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="GameBot AZ">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>GameBot AZ - AZerty</title>
   <style>
     :root {
@@ -20,7 +25,6 @@
       --border: #263b53;
     }
 
-    /* Nouveau mode clair */
     :root[data-mode="light"] {
       --bg: #f2f6fc;
       --panel: #ffffff;
@@ -114,13 +118,8 @@
       white-space: nowrap;
     }
 
-    .theme-toggle:hover {
-      border-color: var(--cyan);
-    }
-
-    .mode-toggle {
-      flex-shrink: 0;
-    }
+    .theme-toggle:hover { border-color: var(--cyan); }
+    .mode-toggle { flex-shrink: 0; }
 
     .theme-menu {
       position: absolute;
@@ -519,7 +518,6 @@
         <p class="subtitle">Ton assistant gaming, avec AZerty !</p>
       </div>
 
-      <!-- Bouton mode clair / sombre -->
       <button class="theme-toggle mode-toggle" id="modeToggle"
               type="button" aria-label="Changer de mode">
         ☀️ Mode clair
@@ -1244,6 +1242,18 @@
 
     // Charger les conversations sauvegardées
     loadConversations();
+  </script>
+
+  <!-- Enregistrement PWA -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+          .catch(error => {
+            console.error("Erreur PWA :", error);
+          });
+      });
+    }
   </script>
 </body>
 </html>
