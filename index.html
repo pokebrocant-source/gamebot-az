@@ -20,6 +20,20 @@
       --border: #263b53;
     }
 
+    /* Nouveau mode clair */
+    :root[data-mode="light"] {
+      --bg: #f2f6fc;
+      --panel: #ffffff;
+      --panel2: #e8eff8;
+      --accent-soft: #dcecf5;
+      --accent-user: #dcecf8;
+      --accent-user-border: #a9c8df;
+      --accent-contrast: #03121d;
+      --text: #17283c;
+      --muted: #52677e;
+      --border: #cbd8e6;
+    }
+
     * { box-sizing: border-box; }
 
     body {
@@ -84,7 +98,6 @@
       font-size: 14px;
     }
 
-    /* Sélecteur de couleurs */
     .theme-wrap {
       position: relative;
       flex-shrink: 0;
@@ -103,6 +116,10 @@
 
     .theme-toggle:hover {
       border-color: var(--cyan);
+    }
+
+    .mode-toggle {
+      flex-shrink: 0;
     }
 
     .theme-menu {
@@ -166,6 +183,10 @@
       border-radius: 20px;
       background: linear-gradient(135deg, #10243a, #0c1828);
       margin-bottom: 18px;
+    }
+
+    :root[data-mode="light"] .intro {
+      background: linear-gradient(135deg, #e3f2fc, #f5f9ff);
     }
 
     .intro h2 {
@@ -252,7 +273,6 @@
       color: var(--text);
     }
 
-    /* Historique : nouveaux éléments */
     .chat-actions {
       display: flex;
       align-items: center;
@@ -382,7 +402,6 @@
       border-radius: 12px;
     }
 
-    /* Animation originale conservée */
     .thinking .mascot {
       animation: bounce .65s ease-in-out infinite alternate;
     }
@@ -420,6 +439,10 @@
       border-radius: 12px;
       padding: 13px;
       outline: none;
+    }
+
+    :root[data-mode="light"] textarea {
+      background: #f7faff;
     }
 
     textarea:focus { border-color: var(--cyan); }
@@ -495,6 +518,12 @@
         <h1>GAMEBOT <span>AZ</span></h1>
         <p class="subtitle">Ton assistant gaming, avec AZerty !</p>
       </div>
+
+      <!-- Bouton mode clair / sombre -->
+      <button class="theme-toggle mode-toggle" id="modeToggle"
+              type="button" aria-label="Changer de mode">
+        ☀️ Mode clair
+      </button>
 
       <div class="theme-wrap">
         <button class="theme-toggle" id="themeToggle"
@@ -584,7 +613,6 @@
         </div>
       </div>
 
-      <!-- Historique des conversations -->
       <div class="history-panel" id="historyPanel" hidden>
         <div class="history-heading">
           <span>📚 Mes conversations</span>
@@ -621,7 +649,7 @@
 
     <footer>
       GameBot AZ · Apprends, joue et progresse avec AZerty 🎮
-      <div class="version">Version 1.2</div>
+      <div class="version">Version 1.3</div>
     </footer>
   </main>
 
@@ -636,7 +664,53 @@
     const gameButtons = document.querySelectorAll(".game");
     const charCount = document.getElementById("charCount");
 
-    // Couleurs disponibles : système original conservé
+    // Mode clair / mode sombre
+    const modeToggle = document.getElementById("modeToggle");
+
+    function applyMode(mode, save = true) {
+      const selectedMode = mode === "light" ? "light" : "dark";
+
+      document.documentElement.dataset.mode = selectedMode;
+
+      modeToggle.textContent = selectedMode === "light"
+        ? "🌙 Mode sombre"
+        : "☀️ Mode clair";
+
+      document.querySelector('meta[name="theme-color"]')
+        .setAttribute(
+          "content",
+          selectedMode === "light" ? "#f2f6fc" : "#07111f"
+        );
+
+      if (save) {
+        try {
+          localStorage.setItem("gamebot-az-mode", selectedMode);
+        } catch (error) {
+          console.warn("Sauvegarde du mode indisponible.");
+        }
+      }
+    }
+
+    let savedMode = "dark";
+
+    try {
+      savedMode = localStorage.getItem("gamebot-az-mode") || "dark";
+    } catch (error) {
+      savedMode = "dark";
+    }
+
+    applyMode(savedMode, false);
+
+    modeToggle.addEventListener("click", () => {
+      const newMode =
+        document.documentElement.dataset.mode === "light"
+          ? "dark"
+          : "light";
+
+      applyMode(newMode);
+    });
+
+    // Couleurs personnalisables originales
     const themes = {
       cyan: {
         accent: "#28d9f5", soft: "#123044",
@@ -764,10 +838,7 @@
     input.addEventListener("input", updateCharCount);
     updateCharCount();
 
-    // --------------------------------------------------
-    // HISTORIQUE DES CONVERSATIONS
-    // --------------------------------------------------
-
+    // Historique des conversations
     const STORAGE_KEY = "gamebot-az-conversations-v1";
     const historyToggle = document.getElementById("historyToggle");
     const historyPanel = document.getElementById("historyPanel");
@@ -776,8 +847,6 @@
 
     let conversations = [];
     let currentConversationId = null;
-
-    // Historique utilisé par l'IA pour le contexte de la discussion
     let history = [];
     let selectedGame = "";
 
@@ -991,10 +1060,7 @@
       if (opening) renderHistory();
     });
 
-    // --------------------------------------------------
-    // AFFICHAGE DES MESSAGES ET MASCOTTE ORIGINALE
-    // --------------------------------------------------
-
+    // Affichage des messages et mascotte
     function scrollToBottom() {
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
@@ -1054,7 +1120,7 @@
       messagesEl.appendChild(row);
     }
 
-    // Boutons des jeux originaux
+    // Boutons des jeux
     gameButtons.forEach(button => {
       button.addEventListener("click", () => {
         selectedGame = button.dataset.game;
@@ -1071,10 +1137,7 @@
       });
     });
 
-    // --------------------------------------------------
-    // CONNEXION À L'IA : API CLOUDFLARE INCHANGÉE
-    // --------------------------------------------------
-
+    // Connexion à l'IA : Cloudflare inchangé
     form.addEventListener("submit", async event => {
       event.preventDefault();
 
@@ -1114,8 +1177,6 @@
         { thinking: true }
       );
 
-      // L'API reçoit toujours les 12 derniers messages,
-      // mais l'historique local conserve toute la conversation.
       const messagesToSend = history.slice(-12);
 
       try {
@@ -1176,13 +1237,12 @@
       }
     });
 
-    // Le bouton Effacer démarre une nouvelle discussion.
-    // Les anciennes conversations restent dans l'historique.
+    // Effacer démarre une nouvelle discussion
     clearButton.addEventListener("click", () => {
       startNewConversation();
     });
 
-    // Charger les conversations sauvegardées au démarrage
+    // Charger les conversations sauvegardées
     loadConversations();
   </script>
 </body>
