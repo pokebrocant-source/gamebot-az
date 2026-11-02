@@ -246,6 +246,104 @@
       font-size: 12px;
     }
 
+    .small-button:hover,
+    .history-delete:hover {
+      border-color: var(--cyan);
+      color: var(--text);
+    }
+
+    /* Historique : nouveaux éléments */
+    .chat-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+
+    .history-panel {
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .history-panel[hidden] { display: none; }
+
+    .history-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .history-count {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .history-empty {
+      color: var(--muted);
+      font-size: 12px;
+      padding: 8px 0;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .history-open {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    .history-name {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .history-date {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      margin-top: 4px;
+    }
+
+    .history-delete {
+      color: var(--muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 9px;
+      cursor: pointer;
+    }
+
     .messages {
       display: flex;
       flex-direction: column;
@@ -379,6 +477,8 @@
       .messages { padding: 12px; }
       .composer { padding: 10px; }
       .send { padding: 0 13px; }
+      .chat-actions { gap: 5px; }
+      .small-button { padding: 7px 8px; font-size: 11px; }
     }
   </style>
 </head>
@@ -406,65 +506,41 @@
         <div class="theme-menu" id="themeMenu" hidden>
           <p class="theme-heading">Choisis ta couleur</p>
           <div class="theme-grid" id="themeGrid">
-            <button class="theme-option" type="button" data-theme="cyan"
-                    aria-pressed="true">
-              <span class="theme-swatch" style="--swatch:#28d9f5"></span>
-              Cyan
+            <button class="theme-option" type="button" data-theme="cyan" aria-pressed="true">
+              <span class="theme-swatch" style="--swatch:#28d9f5"></span>Cyan
             </button>
-            <button class="theme-option" type="button" data-theme="violet"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#a78bfa"></span>
-              Violet
+            <button class="theme-option" type="button" data-theme="violet" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#a78bfa"></span>Violet
             </button>
-            <button class="theme-option" type="button" data-theme="rouge"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#ff5b69"></span>
-              Rouge
+            <button class="theme-option" type="button" data-theme="rouge" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ff5b69"></span>Rouge
             </button>
-            <button class="theme-option" type="button" data-theme="vert"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#39e58c"></span>
-              Vert néon
+            <button class="theme-option" type="button" data-theme="vert" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#39e58c"></span>Vert néon
             </button>
-            <button class="theme-option" type="button" data-theme="bleu"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#3984ff"></span>
-              Bleu
+            <button class="theme-option" type="button" data-theme="bleu" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#3984ff"></span>Bleu
             </button>
-            <button class="theme-option" type="button" data-theme="rose"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#ff72c6"></span>
-              Rose
+            <button class="theme-option" type="button" data-theme="rose" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ff72c6"></span>Rose
             </button>
-            <button class="theme-option" type="button" data-theme="orange"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#ff9b42"></span>
-              Orange
+            <button class="theme-option" type="button" data-theme="orange" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ff9b42"></span>Orange
             </button>
-            <button class="theme-option" type="button" data-theme="jaune"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#ffe45c"></span>
-              Jaune
+            <button class="theme-option" type="button" data-theme="jaune" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ffe45c"></span>Jaune
             </button>
-            <button class="theme-option" type="button" data-theme="turquoise"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#32e0c4"></span>
-              Turquoise
+            <button class="theme-option" type="button" data-theme="turquoise" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#32e0c4"></span>Turquoise
             </button>
-            <button class="theme-option" type="button" data-theme="blanc"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#f3f7fc"></span>
-              Blanc
+            <button class="theme-option" type="button" data-theme="blanc" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#f3f7fc"></span>Blanc
             </button>
-            <button class="theme-option" type="button" data-theme="or"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#ffc857"></span>
-              Or
+            <button class="theme-option" type="button" data-theme="or" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#ffc857"></span>Or
             </button>
-            <button class="theme-option" type="button" data-theme="lime"
-                    aria-pressed="false">
-              <span class="theme-swatch" style="--swatch:#b7f34a"></span>
-              Lime
+            <button class="theme-option" type="button" data-theme="lime" aria-pressed="false">
+              <span class="theme-swatch" style="--swatch:#b7f34a"></span>Lime
             </button>
           </div>
         </div>
@@ -496,7 +572,25 @@
             <div class="status">● Assistant prêt à t'aider</div>
           </span>
         </div>
-        <button class="small-button" id="clear" type="button">Effacer</button>
+
+        <div class="chat-actions">
+          <button class="small-button" id="historyToggle"
+                  type="button" aria-expanded="false">
+            Historique
+          </button>
+          <button class="small-button" id="clear" type="button">
+            Effacer
+          </button>
+        </div>
+      </div>
+
+      <!-- Historique des conversations -->
+      <div class="history-panel" id="historyPanel" hidden>
+        <div class="history-heading">
+          <span>📚 Mes conversations</span>
+          <span class="history-count" id="historyCount">0 conversation</span>
+        </div>
+        <div class="history-list" id="historyList"></div>
       </div>
 
       <div class="messages" id="messages" aria-live="polite">
@@ -521,13 +615,13 @@
 
       <div class="hint">
         AZerty peut se tromper : vérifie les informations importantes.
-        La discussion est conservée uniquement dans cette page ouverte.
+        Tes conversations sont enregistrées sur cet appareil.
       </div>
     </section>
 
     <footer>
       GameBot AZ · Apprends, joue et progresse avec AZerty 🎮
-      <div class="version">Version 1.1</div>
+      <div class="version">Version 1.2</div>
     </footer>
   </main>
 
@@ -542,7 +636,7 @@
     const gameButtons = document.querySelectorAll(".game");
     const charCount = document.getElementById("charCount");
 
-    // Couleurs disponibles
+    // Couleurs disponibles : système original conservé
     const themes = {
       cyan: {
         accent: "#28d9f5", soft: "#123044",
@@ -607,10 +701,11 @@
       root.style.setProperty("--accent-user", theme.user);
       root.style.setProperty("--accent-user-border", theme.userBorder);
 
-      // Contraste du texte sur le bouton Envoyer
-      const lightAccent = ["#28d9f5", "#39e58c", "#32e0c4",
-        "#f3f7fc", "#b7f34a", "#ffe45c", "#ffc857",
-        "#ff9b42", "#ff72c6"].includes(theme.accent);
+      const lightAccent = [
+        "#28d9f5", "#39e58c", "#32e0c4",
+        "#f3f7fc", "#b7f34a", "#ffe45c",
+        "#ffc857", "#ff9b42", "#ff72c6"
+      ].includes(theme.accent);
 
       root.style.setProperty(
         "--accent-contrast",
@@ -633,7 +728,6 @@
       }
     }
 
-    // Recharge la dernière couleur choisie
     try {
       const savedTheme = localStorage.getItem("gamebot-az-theme");
       applyTheme(themes[savedTheme] ? savedTheme : "cyan", false);
@@ -670,9 +764,236 @@
     input.addEventListener("input", updateCharCount);
     updateCharCount();
 
-    // Historique temporaire du chat
+    // --------------------------------------------------
+    // HISTORIQUE DES CONVERSATIONS
+    // --------------------------------------------------
+
+    const STORAGE_KEY = "gamebot-az-conversations-v1";
+    const historyToggle = document.getElementById("historyToggle");
+    const historyPanel = document.getElementById("historyPanel");
+    const historyList = document.getElementById("historyList");
+    const historyCount = document.getElementById("historyCount");
+
+    let conversations = [];
+    let currentConversationId = null;
+
+    // Historique utilisé par l'IA pour le contexte de la discussion
     let history = [];
     let selectedGame = "";
+
+    function createId() {
+      return Date.now().toString(36) +
+        Math.random().toString(36).slice(2, 8);
+    }
+
+    function loadConversations() {
+      try {
+        const saved = JSON.parse(
+          localStorage.getItem(STORAGE_KEY) || "[]"
+        );
+
+        conversations = Array.isArray(saved)
+          ? saved.filter(c => c && Array.isArray(c.messages))
+          : [];
+      } catch (error) {
+        conversations = [];
+      }
+
+      renderHistory();
+    }
+
+    function saveConversations() {
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(conversations)
+        );
+      } catch (error) {
+        alert("L'historique ne peut pas être sauvegardé : le stockage du navigateur est peut-être plein.");
+      }
+    }
+
+    function saveCurrentConversation() {
+      if (!currentConversationId || history.length === 0) return;
+
+      const firstQuestion = history.find(
+        message => message.role === "user"
+      );
+
+      const title = firstQuestion
+        ? firstQuestion.content.slice(0, 55)
+        : "Nouvelle conversation";
+
+      const conversation = {
+        id: currentConversationId,
+        title: title,
+        updatedAt: Date.now(),
+        messages: history
+      };
+
+      const index = conversations.findIndex(
+        item => item.id === currentConversationId
+      );
+
+      if (index >= 0) {
+        conversations[index] = conversation;
+      } else {
+        conversations.unshift(conversation);
+      }
+
+      conversations.sort(
+        (a, b) => b.updatedAt - a.updatedAt
+      );
+
+      saveConversations();
+      renderHistory();
+    }
+
+    function renderHistory() {
+      historyList.replaceChildren();
+
+      const count = conversations.length;
+      historyCount.textContent =
+        count + (count > 1 ? " conversations" : " conversation");
+
+      if (count === 0) {
+        const empty = document.createElement("div");
+        empty.className = "history-empty";
+        empty.textContent =
+          "Aucune conversation enregistrée pour le moment.";
+        historyList.appendChild(empty);
+        return;
+      }
+
+      conversations.forEach(conversation => {
+        const row = document.createElement("div");
+        row.className = "history-item";
+
+        const openButton = document.createElement("button");
+        openButton.type = "button";
+        openButton.className = "history-open";
+
+        const name = document.createElement("span");
+        name.className = "history-name";
+        name.textContent = conversation.title || "Conversation";
+
+        const date = document.createElement("span");
+        date.className = "history-date";
+        date.textContent = new Date(
+          conversation.updatedAt
+        ).toLocaleString("fr-FR");
+
+        openButton.append(name, date);
+
+        openButton.addEventListener("click", () => {
+          openConversation(conversation.id);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "history-delete";
+        deleteButton.textContent = "✕";
+        deleteButton.setAttribute(
+          "aria-label",
+          "Supprimer cette conversation"
+        );
+
+        deleteButton.addEventListener("click", () => {
+          deleteConversation(conversation.id);
+        });
+
+        row.append(openButton, deleteButton);
+        historyList.appendChild(row);
+      });
+    }
+
+    function openConversation(id) {
+      const conversation = conversations.find(
+        item => item.id === id
+      );
+
+      if (!conversation) return;
+
+      currentConversationId = conversation.id;
+      history = conversation.messages.map(
+        message => ({ ...message })
+      );
+
+      selectedGame = "";
+      gameButtons.forEach(button => {
+        button.classList.remove("active");
+      });
+
+      renderMessages(history);
+
+      historyPanel.hidden = true;
+      historyToggle.setAttribute("aria-expanded", "false");
+    }
+
+    function deleteConversation(id) {
+      if (!confirm("Supprimer définitivement cette conversation ?")) {
+        return;
+      }
+
+      conversations = conversations.filter(
+        item => item.id !== id
+      );
+
+      saveConversations();
+
+      if (currentConversationId === id) {
+        startNewConversation();
+      } else {
+        renderHistory();
+      }
+    }
+
+    function startNewConversation() {
+      currentConversationId = null;
+      history = [];
+      selectedGame = "";
+
+      gameButtons.forEach(button => {
+        button.classList.remove("active");
+      });
+
+      showWelcome();
+      input.value = "";
+      updateCharCount();
+
+      historyPanel.hidden = true;
+      historyToggle.setAttribute("aria-expanded", "false");
+    }
+
+    function renderMessages(messages) {
+      messagesEl.replaceChildren();
+
+      if (messages.length === 0) {
+        showWelcome();
+        return;
+      }
+
+      messages.forEach(message => {
+        addMessage(message.role, message.content);
+      });
+
+      scrollToBottom();
+    }
+
+    historyToggle.addEventListener("click", () => {
+      const opening = historyPanel.hidden;
+      historyPanel.hidden = !opening;
+      historyToggle.setAttribute(
+        "aria-expanded",
+        String(opening)
+      );
+
+      if (opening) renderHistory();
+    });
+
+    // --------------------------------------------------
+    // AFFICHAGE DES MESSAGES ET MASCOTTE ORIGINALE
+    // --------------------------------------------------
 
     function scrollToBottom() {
       messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -680,16 +1001,21 @@
 
     function addMessage(role, content, options = {}) {
       const row = document.createElement("div");
-      row.className = "msg " + (role === "user" ? "user" : "bot");
+      row.className =
+        "msg " + (role === "user" ? "user" : "bot");
 
       if (role === "assistant") {
-        if (options.thinking) row.classList.add("thinking");
+        if (options.thinking) {
+          row.classList.add("thinking");
+        }
 
         const mascot = document.createElement("img");
         mascot.className = "mascot";
         mascot.src = "./mascotte.png";
         mascot.alt = "AZerty";
-        mascot.onerror = () => { mascot.style.display = "none"; };
+        mascot.onerror = () => {
+          mascot.style.display = "none";
+        };
 
         const text = document.createElement("div");
         text.className = "bot-text";
@@ -705,32 +1031,80 @@
       return row;
     }
 
+    function showWelcome() {
+      messagesEl.replaceChildren();
+
+      const row = document.createElement("div");
+      row.className = "msg bot";
+
+      const mascot = document.createElement("img");
+      mascot.className = "mascot";
+      mascot.src = "./mascotte.png";
+      mascot.alt = "AZerty";
+      mascot.onerror = () => {
+        mascot.style.display = "none";
+      };
+
+      const text = document.createElement("div");
+      text.className = "bot-text";
+      text.textContent =
+        "Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
+
+      row.append(mascot, text);
+      messagesEl.appendChild(row);
+    }
+
+    // Boutons des jeux originaux
     gameButtons.forEach(button => {
       button.addEventListener("click", () => {
         selectedGame = button.dataset.game;
-        gameButtons.forEach(b =>
-          b.classList.toggle("active", b === button)
-        );
-        input.value = "Aide-moi à progresser sur " + selectedGame + ".";
+
+        gameButtons.forEach(b => {
+          b.classList.toggle("active", b === button);
+        });
+
+        input.value =
+          "Aide-moi à progresser sur " + selectedGame + ".";
+
         updateCharCount();
         input.focus();
       });
     });
 
+    // --------------------------------------------------
+    // CONNEXION À L'IA : API CLOUDFLARE INCHANGÉE
+    // --------------------------------------------------
+
     form.addEventListener("submit", async event => {
       event.preventDefault();
 
       const typedQuestion = input.value.trim();
+
       if (!typedQuestion || sendButton.disabled) return;
 
       const question = selectedGame &&
-        !typedQuestion.toLowerCase().includes(selectedGame.toLowerCase())
+        !typedQuestion.toLowerCase().includes(
+          selectedGame.toLowerCase()
+        )
         ? "Mon jeu est " + selectedGame + ". " + typedQuestion
         : typedQuestion;
 
+      if (!currentConversationId) {
+        currentConversationId = createId();
+      }
+
       addMessage("user", typedQuestion);
+
+      history.push({
+        role: "user",
+        content: question
+      });
+
+      saveCurrentConversation();
+
       input.value = "";
       updateCharCount();
+
       sendButton.disabled = true;
       sendButton.textContent = "...";
 
@@ -740,15 +1114,16 @@
         { thinking: true }
       );
 
-      const messagesToSend = [
-        ...history,
-        { role: "user", content: question }
-      ].slice(-12);
+      // L'API reçoit toujours les 12 derniers messages,
+      // mais l'historique local conserve toute la conversation.
+      const messagesToSend = history.slice(-12);
 
       try {
         const response = await fetch(API_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify({
             question,
             messages: messagesToSend
@@ -756,10 +1131,13 @@
         });
 
         let data;
+
         try {
           data = await response.json();
         } catch {
-          throw new Error("Le serveur a renvoyé une réponse illisible.");
+          throw new Error(
+            "Le serveur a renvoyé une réponse illisible."
+          );
         }
 
         if (!response.ok) {
@@ -775,17 +1153,22 @@
         thinkingRow.remove();
         addMessage("assistant", answer);
 
-        history = [
-          ...messagesToSend,
-          { role: "assistant", content: answer }
-        ].slice(-12);
+        history.push({
+          role: "assistant",
+          content: answer
+        });
+
+        saveCurrentConversation();
+
       } catch (error) {
         thinkingRow.remove();
-        addMessage(
-          "assistant",
-          "Oups ! Je n'arrive pas à contacter le serveur. Vérifie ta connexion et réessaie. Si le problème continue, vérifie le déploiement Cloudflare."
-        );
+
+        const errorMessage =
+          "Oups ! Je n'arrive pas à contacter le serveur. Vérifie ta connexion et réessaie. Si le problème continue, vérifie le déploiement Cloudflare.";
+
+        addMessage("assistant", errorMessage);
         console.error("Erreur GameBot AZ :", error);
+
       } finally {
         sendButton.disabled = false;
         sendButton.textContent = "Envoyer";
@@ -793,31 +1176,14 @@
       }
     });
 
+    // Le bouton Effacer démarre une nouvelle discussion.
+    // Les anciennes conversations restent dans l'historique.
     clearButton.addEventListener("click", () => {
-      history = [];
-      selectedGame = "";
-      gameButtons.forEach(button => button.classList.remove("active"));
-      messagesEl.replaceChildren();
-
-      const row = document.createElement("div");
-      row.className = "msg bot";
-
-      const mascot = document.createElement("img");
-      mascot.className = "mascot";
-      mascot.src = "./mascotte.png";
-      mascot.alt = "AZerty";
-      mascot.onerror = () => { mascot.style.display = "none"; };
-
-      const text = document.createElement("div");
-      text.className = "bot-text";
-      text.textContent =
-        "Bonjour ! Je suis AZerty 👋 Je suis là pour t'apprendre et t'aider à jouer à tes jeux vidéo préférés ! 🎮";
-
-      row.append(mascot, text);
-      messagesEl.appendChild(row);
-      input.value = "";
-      updateCharCount();
+      startNewConversation();
     });
+
+    // Charger les conversations sauvegardées au démarrage
+    loadConversations();
   </script>
 </body>
 </html>
