@@ -1,0 +1,18 @@
+{
+  "name": "GameBot AZ",
+  "short_name": "GameBot AZ",
+  "description": "Ton assistant gaming, avec AZerty !",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "icons": [
+    {
+      "src": "./logo-gamebot.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
