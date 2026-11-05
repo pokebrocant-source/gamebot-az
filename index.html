@@ -226,6 +226,83 @@
       background: var(--accent-soft);
     }
 
+    /* Profil joueur */
+    .player-profile {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .profile-header h2 {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .profile-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .profile-field label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .profile-field input,
+    .profile-field select {
+      width: 100%;
+      min-width: 0;
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      outline: none;
+      font: inherit;
+      font-size: 13px;
+    }
+
+    .profile-field input:focus,
+    .profile-field select:focus {
+      border-color: var(--cyan);
+    }
+
+    .profile-save {
+      margin-top: 12px;
+      width: 100%;
+      padding: 11px;
+      color: var(--accent-contrast);
+      background: var(--cyan);
+      border: 0;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .profile-status {
+      color: var(--muted);
+      font-size: 11px;
+      margin: 9px 0 0;
+    }
+
     .chat {
       background: var(--panel);
       border: 1px solid var(--border);
@@ -501,6 +578,7 @@
       .send { padding: 0 13px; }
       .chat-actions { gap: 5px; }
       .small-button { padding: 7px 8px; font-size: 11px; }
+      .profile-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -579,6 +657,65 @@
       <p>
         Besoin d'aide sur un jeu ? Pose ta question à AZerty :
         astuces, explications, stratégies et conseils pour progresser.
+      </p>
+    </section>
+
+    <section class="player-profile">
+      <div class="profile-header">
+        <h2>👤 Mon profil joueur</h2>
+        <span>🎮</span>
+      </div>
+
+      <div class="profile-grid">
+        <div class="profile-field">
+          <label for="playerName">Mon pseudo</label>
+          <input id="playerName" maxlength="30"
+                 placeholder="Ex : AZerty">
+        </div>
+
+        <div class="profile-field">
+          <label for="playerGame">Mon jeu principal</label>
+          <select id="playerGame">
+            <option value="">Choisir un jeu</option>
+            <option>Roblox</option>
+            <option>Brawl Stars</option>
+            <option>Fortnite</option>
+            <option>Minecraft</option>
+            <option>Rocket League</option>
+            <option>Autre</option>
+          </select>
+        </div>
+
+        <div class="profile-field">
+          <label for="playerLevel">Mon niveau / trophées</label>
+          <input id="playerLevel" maxlength="40"
+                 placeholder="Ex : niveau 800">
+        </div>
+
+        <div class="profile-field">
+          <label for="playerObjective">Mon objectif</label>
+          <input id="playerObjective" maxlength="100"
+                 placeholder="Ex : progresser et gagner">
+        </div>
+
+        <div class="profile-field">
+          <label for="playerStyle">Mon style de jeu</label>
+          <select id="playerStyle">
+            <option value="">Choisir un style</option>
+            <option>Débutant</option>
+            <option>Décontracté</option>
+            <option>Compétitif</option>
+            <option>Expert</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="profile-save" id="saveProfile" type="button">
+        💾 Enregistrer mon profil
+      </button>
+
+      <p class="profile-status" id="profileStatus">
+        Ton profil est enregistré uniquement sur cet appareil.
       </p>
     </section>
 
@@ -835,6 +972,61 @@
 
     input.addEventListener("input", updateCharCount);
     updateCharCount();
+
+    // Profil joueur sauvegardé sur cet appareil
+    const PROFILE_KEY = "gamebot-az-player-profile";
+
+    const profileFields = {
+      name: document.getElementById("playerName"),
+      game: document.getElementById("playerGame"),
+      level: document.getElementById("playerLevel"),
+      objective: document.getElementById("playerObjective"),
+      style: document.getElementById("playerStyle")
+    };
+
+    const saveProfileButton = document.getElementById("saveProfile");
+    const profileStatus = document.getElementById("profileStatus");
+
+    function getPlayerProfile() {
+      return {
+        name: profileFields.name.value.trim(),
+        game: profileFields.game.value,
+        level: profileFields.level.value.trim(),
+        objective: profileFields.objective.value.trim(),
+        style: profileFields.style.value
+      };
+    }
+
+    function savePlayerProfile() {
+      const profile = getPlayerProfile();
+
+      try {
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+        profileStatus.textContent = "✅ Profil joueur enregistré !";
+      } catch (error) {
+        profileStatus.textContent =
+          "Impossible d'enregistrer le profil sur cet appareil.";
+      }
+    }
+
+    function loadPlayerProfile() {
+      try {
+        const profile = JSON.parse(
+          localStorage.getItem(PROFILE_KEY) || "{}"
+        );
+
+        profileFields.name.value = profile.name || "";
+        profileFields.game.value = profile.game || "";
+        profileFields.level.value = profile.level || "";
+        profileFields.objective.value = profile.objective || "";
+        profileFields.style.value = profile.style || "";
+      } catch (error) {
+        console.warn("Impossible de charger le profil joueur.");
+      }
+    }
+
+    saveProfileButton.addEventListener("click", savePlayerProfile);
+    loadPlayerProfile();
 
     // Historique des conversations
     const STORAGE_KEY = "gamebot-az-conversations-v1";
@@ -1143,12 +1335,27 @@
 
       if (!typedQuestion || sendButton.disabled) return;
 
-      const question = selectedGame &&
+      const baseQuestion = selectedGame &&
         !typedQuestion.toLowerCase().includes(
           selectedGame.toLowerCase()
         )
         ? "Mon jeu est " + selectedGame + ". " + typedQuestion
         : typedQuestion;
+
+      const profile = getPlayerProfile();
+
+      const profileContext = [
+        "PROFIL DU JOUEUR :",
+        profile.name ? "Pseudo : " + profile.name : "",
+        profile.game ? "Jeu principal : " + profile.game : "",
+        profile.level ? "Niveau ou trophées : " + profile.level : "",
+        profile.objective ? "Objectif : " + profile.objective : "",
+        profile.style ? "Style de jeu : " + profile.style : ""
+      ].filter(Boolean).join("\n");
+
+      const question = profileContext
+        ? profileContext + "\n\nQUESTION DU JOUEUR : " + baseQuestion
+        : baseQuestion;
 
       if (!currentConversationId) {
         currentConversationId = createId();
