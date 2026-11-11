@@ -58,7 +58,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    /* Fond animé */
     #particleCanvas {
       position: fixed;
       inset: 0;
@@ -101,6 +100,77 @@
     }
 
     button, textarea { font: inherit; }
+
+    /* PAGE DE BIENVENUE */
+    #welcomeScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 50% 35%, #123044, transparent 65%),
+        var(--bg);
+    }
+
+    #welcomeScreen[hidden] {
+      display: none;
+    }
+
+    .welcome-content {
+      width: min(600px, 100%);
+      padding: 30px 22px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: var(--panel);
+      box-shadow: 0 15px 50px #0005;
+    }
+
+    .welcome-logo {
+      width: 105px;
+      height: 105px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      animation: bounce 1.5s ease-in-out infinite alternate;
+    }
+
+    .welcome-content h2 {
+      font-size: clamp(24px, 6vw, 34px);
+      margin: 0 0 18px;
+    }
+
+    .welcome-content h2 span {
+      color: var(--cyan);
+    }
+
+    .welcome-content p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .welcome-next {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      padding: 13px 24px;
+      color: var(--accent-contrast);
+      background: var(--cyan);
+      border: 0;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .welcome-next:hover {
+      filter: brightness(1.12);
+    }
 
     header {
       display: flex;
@@ -624,14 +694,15 @@
       .chat-actions { gap: 5px; }
       .small-button { padding: 7px 8px; font-size: 11px; }
       .profile-grid { grid-template-columns: 1fr; }
+      .welcome-content { padding: 25px 17px; }
+      .welcome-logo { width: 85px; height: 85px; }
+      .welcome-next { right: 16px; bottom: 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      body::before {
-        animation: none;
-      }
-
-      .thinking .mascot {
+      body::before,
+      .thinking .mascot,
+      .welcome-logo {
         animation: none;
       }
     }
@@ -641,7 +712,34 @@
 <body>
   <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
-  <main class="container">
+  <!-- PAGE DE BIENVENUE -->
+  <section id="welcomeScreen" aria-labelledby="welcomeTitle">
+    <div class="welcome-content">
+      <img
+        src="./mascotte.png"
+        alt="Mascotte AZerty"
+        class="welcome-logo"
+        onerror="this.style.display='none'"
+      >
+
+      <h2 id="welcomeTitle">
+        Bienvenue à toi, jeune <span>Atlasse</span> !
+      </h2>
+
+      <p>
+        Tu te trouves dans mon antre.
+        Voici mon IA AZerty ! Elle pourra répondre à toutes tes
+        questions concernant le gaming. 🎮
+      </p>
+    </div>
+
+    <button class="welcome-next" id="welcomeNext" type="button">
+      Suivant →
+    </button>
+  </section>
+
+  <!-- SITE PRINCIPAL -->
+  <main class="container" id="mainSite" hidden>
     <header>
       <div class="logo">
         <img src="./logo-gamebot.png" alt="Logo GameBot AZ"
@@ -836,11 +934,22 @@
 
     <footer>
       GameBot AZ · Apprends, joue et progresse avec AZerty 🎮
-      <div class="version">Version 1.4</div>
+      <div class="version">Version 1.5</div>
     </footer>
   </main>
 
   <script>
+    // Page de bienvenue : passage au site principal
+    const welcomeScreen = document.getElementById("welcomeScreen");
+    const welcomeNext = document.getElementById("welcomeNext");
+    const mainSite = document.getElementById("mainSite");
+
+    welcomeNext.addEventListener("click", () => {
+      welcomeScreen.hidden = true;
+      mainSite.hidden = false;
+      window.scrollTo(0, 0);
+    });
+
     // Animation du fond : particules cyan
     (() => {
       const canvas = document.getElementById("particleCanvas");
@@ -918,7 +1027,6 @@
 
         ctx.shadowBlur = 0;
 
-        // Petites lignes entre les particules proches
         for (let i = 0; i < particles.length; i++) {
           for (let j = i + 1; j < particles.length; j++) {
             const a = particles[i];
@@ -1454,7 +1562,7 @@
         .replace(/[^a-z0-9 ]/g, " ");
 
       const aliases = {
-        "Minecraft": ["minecraft", "mincraft", "mine craft", "mincraft"],
+        "Minecraft": ["minecraft", "mincraft", "mine craft"],
         "Fortnite": ["fortnite", "fort night"],
         "Roblox": ["roblox", "robloks"],
         "Brawl Stars": ["brawl stars", "brawlstar", "brawl"],
@@ -1487,7 +1595,6 @@
       const typedQuestion = input.value.trim();
       if (!typedQuestion || sendButton.disabled) return;
 
-      // Une mention explicite dans la question passe avant le bouton de jeu.
       const mentionedGame = detectMentionedGame(typedQuestion);
 
       let baseQuestion = typedQuestion;
@@ -1529,8 +1636,6 @@
 
       addMessage("user", typedQuestion);
 
-      // Historique propre : on conserve la vraie question,
-      // pas les informations du profil ajoutées pour l'IA.
       history.push({
         role: "user",
         content: typedQuestion
@@ -1550,7 +1655,6 @@
         { thinking: true }
       );
 
-      // Nettoyage des anciennes entrées contenant l'ancien contexte profil.
       const messagesToSend = history.slice(-12).map(message => {
         let content = message.content || "";
 
@@ -1569,7 +1673,6 @@
         };
       });
 
-      // La question actuelle reçoit le profil une seule fois.
       if (messagesToSend.length > 0) {
         messagesToSend[messagesToSend.length - 1] = {
           role: "user",
