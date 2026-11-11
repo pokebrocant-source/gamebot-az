@@ -226,7 +226,6 @@
       background: var(--accent-soft);
     }
 
-    /* Profil joueur */
     .player-profile {
       background: var(--panel);
       border: 1px solid var(--border);
@@ -669,8 +668,7 @@
       <div class="profile-grid">
         <div class="profile-field">
           <label for="playerName">Mon pseudo</label>
-          <input id="playerName" maxlength="30"
-                 placeholder="Ex : AZerty">
+          <input id="playerName" maxlength="30" placeholder="Ex : AZerty">
         </div>
 
         <div class="profile-field">
@@ -688,14 +686,12 @@
 
         <div class="profile-field">
           <label for="playerLevel">Mon niveau / trophées</label>
-          <input id="playerLevel" maxlength="40"
-                 placeholder="Ex : niveau 800">
+          <input id="playerLevel" maxlength="40" placeholder="Ex : niveau 800">
         </div>
 
         <div class="profile-field">
           <label for="playerObjective">Mon objectif</label>
-          <input id="playerObjective" maxlength="100"
-                 placeholder="Ex : progresser et gagner">
+          <input id="playerObjective" maxlength="100" placeholder="Ex : progresser et gagner">
         </div>
 
         <div class="profile-field">
@@ -738,13 +734,10 @@
         </div>
 
         <div class="chat-actions">
-          <button class="small-button" id="historyToggle"
-                  type="button" aria-expanded="false">
+          <button class="small-button" id="historyToggle" type="button" aria-expanded="false">
             Historique
           </button>
-          <button class="small-button" id="clear" type="button">
-            Effacer
-          </button>
+          <button class="small-button" id="clear" type="button">Effacer</button>
         </div>
       </div>
 
@@ -804,7 +797,6 @@
 
     function applyMode(mode, save = true) {
       const selectedMode = mode === "light" ? "light" : "dark";
-
       document.documentElement.dataset.mode = selectedMode;
 
       modeToggle.textContent = selectedMode === "light"
@@ -812,10 +804,8 @@
         : "☀️ Mode clair";
 
       document.querySelector('meta[name="theme-color"]')
-        .setAttribute(
-          "content",
-          selectedMode === "light" ? "#f2f6fc" : "#07111f"
-        );
+        .setAttribute("content",
+          selectedMode === "light" ? "#f2f6fc" : "#07111f");
 
       if (save) {
         try {
@@ -839,62 +829,24 @@
     modeToggle.addEventListener("click", () => {
       const newMode =
         document.documentElement.dataset.mode === "light"
-          ? "dark"
-          : "light";
-
+          ? "dark" : "light";
       applyMode(newMode);
     });
 
-    // Couleurs personnalisables originales
+    // Couleurs personnalisables
     const themes = {
-      cyan: {
-        accent: "#28d9f5", soft: "#123044",
-        user: "#15334a", userBorder: "#24506b"
-      },
-      violet: {
-        accent: "#a78bfa", soft: "#30264b",
-        user: "#33264d", userBorder: "#59427f"
-      },
-      rouge: {
-        accent: "#ff5b69", soft: "#49232e",
-        user: "#48232e", userBorder: "#7c3948"
-      },
-      vert: {
-        accent: "#39e58c", soft: "#173c32",
-        user: "#194333", userBorder: "#2b7052"
-      },
-      bleu: {
-        accent: "#3984ff", soft: "#1a3156",
-        user: "#1b3155", userBorder: "#345b91"
-      },
-      rose: {
-        accent: "#ff72c6", soft: "#482541",
-        user: "#492541", userBorder: "#81436f"
-      },
-      orange: {
-        accent: "#ff9b42", soft: "#49311f",
-        user: "#49301e", userBorder: "#80502b"
-      },
-      jaune: {
-        accent: "#ffe45c", soft: "#49401f",
-        user: "#49401f", userBorder: "#80702b"
-      },
-      turquoise: {
-        accent: "#32e0c4", soft: "#173d3b",
-        user: "#19413e", userBorder: "#2b7069"
-      },
-      blanc: {
-        accent: "#f3f7fc", soft: "#303b4a",
-        user: "#303b4a", userBorder: "#58677a"
-      },
-      or: {
-        accent: "#ffc857", soft: "#49391f",
-        user: "#49391f", userBorder: "#80632b"
-      },
-      lime: {
-        accent: "#b7f34a", soft: "#35421f",
-        user: "#35421f", userBorder: "#617c2b"
-      }
+      cyan: { accent:"#28d9f5", soft:"#123044", user:"#15334a", userBorder:"#24506b" },
+      violet: { accent:"#a78bfa", soft:"#30264b", user:"#33264d", userBorder:"#59427f" },
+      rouge: { accent:"#ff5b69", soft:"#49232e", user:"#48232e", userBorder:"#7c3948" },
+      vert: { accent:"#39e58c", soft:"#173c32", user:"#194333", userBorder:"#2b7052" },
+      bleu: { accent:"#3984ff", soft:"#1a3156", user:"#1b3155", userBorder:"#345b91" },
+      rose: { accent:"#ff72c6", soft:"#482541", user:"#492541", userBorder:"#81436f" },
+      orange: { accent:"#ff9b42", soft:"#49311f", user:"#49301e", userBorder:"#80502b" },
+      jaune: { accent:"#ffe45c", soft:"#49401f", user:"#49401f", userBorder:"#80702b" },
+      turquoise: { accent:"#32e0c4", soft:"#173d3b", user:"#19413e", userBorder:"#2b7069" },
+      blanc: { accent:"#f3f7fc", soft:"#303b4a", user:"#303b4a", userBorder:"#58677a" },
+      or: { accent:"#ffc857", soft:"#49391f", user:"#49391f", userBorder:"#80632b" },
+      lime: { accent:"#b7f34a", soft:"#35421f", user:"#35421f", userBorder:"#617c2b" }
     };
 
     const themeToggle = document.getElementById("themeToggle");
@@ -922,10 +874,8 @@
       );
 
       themeOptions.forEach(option => {
-        option.setAttribute(
-          "aria-pressed",
-          String(option.dataset.theme === name)
-        );
+        option.setAttribute("aria-pressed",
+          String(option.dataset.theme === name));
       });
 
       if (save) {
@@ -973,7 +923,7 @@
     input.addEventListener("input", updateCharCount);
     updateCharCount();
 
-    // Profil joueur sauvegardé sur cet appareil
+    // Profil joueur
     const PROFILE_KEY = "gamebot-az-player-profile";
 
     const profileFields = {
@@ -1063,10 +1013,7 @@
 
     function saveConversations() {
       try {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify(conversations)
-        );
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
       } catch (error) {
         alert("L'historique ne peut pas être sauvegardé : le stockage du navigateur est peut-être plein.");
       }
@@ -1100,10 +1047,7 @@
         conversations.unshift(conversation);
       }
 
-      conversations.sort(
-        (a, b) => b.updatedAt - a.updatedAt
-      );
-
+      conversations.sort((a, b) => b.updatedAt - a.updatedAt);
       saveConversations();
       renderHistory();
     }
@@ -1143,7 +1087,6 @@
         ).toLocaleString("fr-FR");
 
         openButton.append(name, date);
-
         openButton.addEventListener("click", () => {
           openConversation(conversation.id);
         });
@@ -1153,8 +1096,7 @@
         deleteButton.className = "history-delete";
         deleteButton.textContent = "✕";
         deleteButton.setAttribute(
-          "aria-label",
-          "Supprimer cette conversation"
+          "aria-label", "Supprimer cette conversation"
         );
 
         deleteButton.addEventListener("click", () => {
@@ -1167,37 +1109,24 @@
     }
 
     function openConversation(id) {
-      const conversation = conversations.find(
-        item => item.id === id
-      );
-
+      const conversation = conversations.find(item => item.id === id);
       if (!conversation) return;
 
       currentConversationId = conversation.id;
-      history = conversation.messages.map(
-        message => ({ ...message })
-      );
+      history = conversation.messages.map(message => ({ ...message }));
 
       selectedGame = "";
-      gameButtons.forEach(button => {
-        button.classList.remove("active");
-      });
+      gameButtons.forEach(button => button.classList.remove("active"));
 
       renderMessages(history);
-
       historyPanel.hidden = true;
       historyToggle.setAttribute("aria-expanded", "false");
     }
 
     function deleteConversation(id) {
-      if (!confirm("Supprimer définitivement cette conversation ?")) {
-        return;
-      }
+      if (!confirm("Supprimer définitivement cette conversation ?")) return;
 
-      conversations = conversations.filter(
-        item => item.id !== id
-      );
-
+      conversations = conversations.filter(item => item.id !== id);
       saveConversations();
 
       if (currentConversationId === id) {
@@ -1212,9 +1141,7 @@
       history = [];
       selectedGame = "";
 
-      gameButtons.forEach(button => {
-        button.classList.remove("active");
-      });
+      gameButtons.forEach(button => button.classList.remove("active"));
 
       showWelcome();
       input.value = "";
@@ -1242,36 +1169,28 @@
     historyToggle.addEventListener("click", () => {
       const opening = historyPanel.hidden;
       historyPanel.hidden = !opening;
-      historyToggle.setAttribute(
-        "aria-expanded",
-        String(opening)
-      );
+      historyToggle.setAttribute("aria-expanded", String(opening));
 
       if (opening) renderHistory();
     });
 
-    // Affichage des messages et mascotte
+    // Messages et mascotte
     function scrollToBottom() {
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
     function addMessage(role, content, options = {}) {
       const row = document.createElement("div");
-      row.className =
-        "msg " + (role === "user" ? "user" : "bot");
+      row.className = "msg " + (role === "user" ? "user" : "bot");
 
       if (role === "assistant") {
-        if (options.thinking) {
-          row.classList.add("thinking");
-        }
+        if (options.thinking) row.classList.add("thinking");
 
         const mascot = document.createElement("img");
         mascot.className = "mascot";
         mascot.src = "./mascotte.png";
         mascot.alt = "AZerty";
-        mascot.onerror = () => {
-          mascot.style.display = "none";
-        };
+        mascot.onerror = () => { mascot.style.display = "none"; };
 
         const text = document.createElement("div");
         text.className = "bot-text";
@@ -1297,9 +1216,7 @@
       mascot.className = "mascot";
       mascot.src = "./mascotte.png";
       mascot.alt = "AZerty";
-      mascot.onerror = () => {
-        mascot.style.display = "none";
-      };
+      mascot.onerror = () => { mascot.style.display = "none"; };
 
       const text = document.createElement("div");
       text.className = "bot-text";
@@ -1319,43 +1236,89 @@
           b.classList.toggle("active", b === button);
         });
 
-        input.value =
-          "Aide-moi à progresser sur " + selectedGame + ".";
-
+        input.value = "Aide-moi à progresser sur " + selectedGame + ".";
         updateCharCount();
         input.focus();
       });
     });
+
+    // Détection du jeu mentionné dans la question
+    function detectMentionedGame(questionText) {
+      const normalized = questionText
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9 ]/g, " ");
+
+      const aliases = {
+        "Minecraft": ["minecraft", "mincraft", "mine craft", "mincraft"],
+        "Fortnite": ["fortnite", "fort night"],
+        "Roblox": ["roblox", "robloks"],
+        "Brawl Stars": ["brawl stars", "brawlstar", "brawl"],
+        "Rocket League": ["rocket league", "rocketleague"],
+        "Valorant": ["valorant"],
+        "League of Legends": ["league of legends", "lol"],
+        "Among Us": ["among us", "amongus"],
+        "Genshin Impact": ["genshin impact", "genshin"],
+        "Call of Duty": ["call of duty", "cod"],
+        "GTA": ["gta", "grand theft auto"],
+        "EA Sports FC": ["ea sports fc", "fifa"]
+      };
+
+      for (const [game, names] of Object.entries(aliases)) {
+        if (names.some(name => {
+          const safeName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          return new RegExp("(^| )" + safeName + "( |$)", "i").test(normalized);
+        })) {
+          return game;
+        }
+      }
+
+      return "";
+    }
 
     // Connexion à l'IA : Cloudflare inchangé
     form.addEventListener("submit", async event => {
       event.preventDefault();
 
       const typedQuestion = input.value.trim();
-
       if (!typedQuestion || sendButton.disabled) return;
 
-      const baseQuestion = selectedGame &&
-        !typedQuestion.toLowerCase().includes(
-          selectedGame.toLowerCase()
-        )
-        ? "Mon jeu est " + selectedGame + ". " + typedQuestion
-        : typedQuestion;
+      // Une mention explicite dans la question passe avant le bouton de jeu.
+      const mentionedGame = detectMentionedGame(typedQuestion);
+
+      let baseQuestion = typedQuestion;
+
+      if (!mentionedGame && selectedGame) {
+        baseQuestion =
+          "Le jeu concerné est " + selectedGame + ". " + typedQuestion;
+      }
 
       const profile = getPlayerProfile();
 
       const profileContext = [
-        "PROFIL DU JOUEUR :",
+        "INFORMATIONS SUR LE JOUEUR (à utiliser seulement si utile) :",
         profile.name ? "Pseudo : " + profile.name : "",
-        profile.game ? "Jeu principal : " + profile.game : "",
+        profile.game ? "Jeu préféré : " + profile.game : "",
         profile.level ? "Niveau ou trophées : " + profile.level : "",
         profile.objective ? "Objectif : " + profile.objective : "",
         profile.style ? "Style de jeu : " + profile.style : ""
       ].filter(Boolean).join("\n");
 
-      const question = profileContext
-        ? profileContext + "\n\nQUESTION DU JOUEUR : " + baseQuestion
-        : baseQuestion;
+      const question = [
+        "INSTRUCTIONS IMPORTANTES :",
+        "Tu es AZerty, un assistant gaming capable d'aider sur différents jeux.",
+        "Le jeu préféré indiqué dans le profil ne limite jamais les sujets.",
+        "Le joueur peut poser des questions sur un autre jeu que son jeu préféré.",
+        "Si la question mentionne un jeu précis, réponds sur ce jeu précis.",
+        "Ne remplace jamais le jeu demandé par le jeu préféré du profil.",
+        "Si le joueur fait une faute de frappe évidente dans le nom d'un jeu, essaie de comprendre le jeu voulu.",
+        "Ne parle pas du profil si cela n'aide pas à répondre.",
+        "",
+        profileContext,
+        "",
+        "QUESTION DU JOUEUR : " + baseQuestion
+      ].filter(Boolean).join("\n");
 
       if (!currentConversationId) {
         currentConversationId = createId();
@@ -1363,9 +1326,11 @@
 
       addMessage("user", typedQuestion);
 
+      // Historique propre : on conserve la vraie question,
+      // pas les informations du profil ajoutées pour l'IA.
       history.push({
         role: "user",
-        content: question
+        content: typedQuestion
       });
 
       saveCurrentConversation();
@@ -1382,7 +1347,32 @@
         { thinking: true }
       );
 
-      const messagesToSend = history.slice(-12);
+      // Nettoyage des anciennes entrées contenant l'ancien contexte profil.
+      const messagesToSend = history.slice(-12).map(message => {
+        let content = message.content || "";
+
+        if (message.role === "user") {
+          const marker = "QUESTION DU JOUEUR : ";
+          const markerIndex = content.lastIndexOf(marker);
+
+          if (markerIndex !== -1) {
+            content = content.slice(markerIndex + marker.length);
+          }
+        }
+
+        return {
+          role: message.role,
+          content: content
+        };
+      });
+
+      // La question actuelle reçoit le profil une seule fois.
+      if (messagesToSend.length > 0) {
+        messagesToSend[messagesToSend.length - 1] = {
+          role: "user",
+          content: question
+        };
+      }
 
       try {
         const response = await fetch(API_URL, {
@@ -1401,9 +1391,7 @@
         try {
           data = await response.json();
         } catch {
-          throw new Error(
-            "Le serveur a renvoyé une réponse illisible."
-          );
+          throw new Error("Le serveur a renvoyé une réponse illisible.");
         }
 
         if (!response.ok) {
